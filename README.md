@@ -117,6 +117,10 @@ Minimum Android SDK: the plugin requires a minimum API level of 21.
 
 The minimum iOS version supported is 11.
 
+## Dart Versions
+
+- Dart 2: >= 2.7.0
+
 ## Maintainers
 
 - [AbedElaziz Shehadeh](https://github.com/AbedElazizShe)

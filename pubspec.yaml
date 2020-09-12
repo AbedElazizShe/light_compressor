@@ -1,6 +1,8 @@
 name: light_compressor
 description: A powerful and easy-to-use video compression plugin for Flutter.
-version: 0.0.1
+version: 0.0.3
+repository: https://github.com/AbedElazizShe/light_compressor
+issue_tracker: https://github.com/AbedElazizShe/light_compressor/issues
 homepage: https://github.com/AbedElazizShe
 
 environment:
