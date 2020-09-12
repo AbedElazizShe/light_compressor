@@ -1,5 +1,5 @@
 <p align="left">
-<a href="https://pub.dev/packages/light_compressor"><img src="https://img.shields.io/pub/v/flutter_bloc.svg" alt="Pub"></a>
+<a href="https://pub.dev/packages/light_compressor"><img src="https://img.shields.io/pub/v/light_compressor.svg" alt="Pub"></a>
 </p>
 
 
