@@ -85,8 +85,11 @@ In order to get the progress of compression while the video is being compressed 
 LightCompressor.progressStream
 ```
 
+For more information on how to use the plugin, refer to the [sample app](https://github.com/AbedElazizShe/light_compressor/blob/master/example/lib/main.dart)
+
 ## Compatibility
 Minimum Android SDK: the plugin requires a minimum API level of 21.
+
 The minimum iOS version supported is 11.
 
 ## Maintainers
