@@ -1,3 +1,8 @@
+<p align="left">
+<a href="https://pub.dev/packages/light_compressor"><img src="https://img.shields.io/pub/v/flutter_bloc.svg" alt="Pub"></a>
+</p>
+
+
 # light_compressor
 A powerful and easy-to-use video compression plugin for Flutter built based on [LightCompressor](https://github.com/AbedElazizShe/LightCompressor/tree/master/lightcompressor) library for Android and [LightCompressor_iOS](https://github.com/AbedElazizShe/LightCompressor_iOS) library for iOS. This plugin generates a compressed MP4 video with a modified width, height, and bitrate.
 
@@ -12,7 +17,7 @@ You can pass one of a 4 video qualities; `very_high`, `high`, `medium`, or `low`
 
 Android             |  iOS
 :-------------------------:|:-------------------------:
-![Android-demo](/pictures/android.gif)   |  ![iOS-demo](/pictures/ios.gif)
+![Android-demo](https://github.com/AbedElazizShe/light_compressor/blob/master/pictures/android.gif)   |  ![iOS-demo](https://github.com/AbedElazizShe/light_compressor/blob/master/pictures/ios.gif)
 
 ## Installation
 
@@ -35,6 +40,26 @@ Add the following permissions in AndroidManifest.xml:
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 ```
+
+Include this in your Project-level build.gradle file:
+```groovy
+allprojects {
+    repositories {
+        .
+        .
+        .
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+Include this in your Module-level build.gradle file:
+
+```groovy
+implementation 'com.github.AbedElazizShe:LightCompressor:0.7.3'
+```
+
+And since the library depends on Kotlin version `1.4.0`, please ensure that `1.4.0` is the minimum kotlin version in your project by changing `ext.kotlin_version` in your Project-level build.gradle file.
 
 ## Usage
 
