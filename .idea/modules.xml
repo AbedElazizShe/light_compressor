@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/light_compressor.iml" filepath="$PROJECT_DIR$/light_compressor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/light_compressor_android.iml" filepath="$PROJECT_DIR$/android/light_compressor_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example/android/light_compressor_example_android.iml" filepath="$PROJECT_DIR$/example/android/light_compressor_example_android.iml" />
+    </modules>
+  </component>
+</project>

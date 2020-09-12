@@ -1,0 +1,32 @@
+name: light_compressor_example
+description: Demonstrates how to use the light_compressor plugin.
+version: 0.0.1
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  light_compressor:
+    path: ../
+
+  cupertino_icons: ^1.0.0
+  image_picker: ^0.6.7+7
+  video_player: ^0.10.12+2
+  video_thumbnail: ^0.2.2
+  ext_storage: ^1.0.3
+  path_provider: ^1.6.14
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true
