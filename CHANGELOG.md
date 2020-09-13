@@ -1,3 +1,8 @@
+## 0.0.4
+
+Updated documentation.
+Code cleanup.
+
 ## 0.0.3
 
 Updated details about the plugin.

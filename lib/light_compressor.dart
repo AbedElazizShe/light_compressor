@@ -23,6 +23,7 @@ enum VideoQuality {
 /// Light compressor that perform video compression and cancel compression
 class LightCompressor {
   static const MethodChannel _channel = MethodChannel('light_compressor');
+
   /// A stream to listen to video compression progress
   static const EventChannel progressStream = EventChannel('compression/stream');
 

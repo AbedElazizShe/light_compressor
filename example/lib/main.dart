@@ -126,27 +126,28 @@ class _MyAppState extends State<MyApp> {
                 Visibility(
                   visible: !_isVideoCompressed,
                   child: StreamBuilder<dynamic>(
-                      stream: LightCompressor.progressStream
-                          .receiveBroadcastStream(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (snapshot.data != null && snapshot.data > 0) {
-                          return Column(
-                            children: <Widget>[
-                              LinearProgressIndicator(
-                                minHeight: 8,
-                                value: snapshot.data / 100,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                '${snapshot.data.toStringAsFixed(0)}%',
-                                style: const TextStyle(fontSize: 20),
-                              )
-                            ],
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      }),
+                    stream:
+                        LightCompressor.progressStream.receiveBroadcastStream(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<dynamic> snapshot) {
+                      if (snapshot.data != null && snapshot.data > 0) {
+                        return Column(
+                          children: <Widget>[
+                            LinearProgressIndicator(
+                              minHeight: 8,
+                              value: snapshot.data / 100,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '${snapshot.data.toStringAsFixed(0)}%',
+                              style: const TextStyle(fontSize: 20),
+                            )
+                          ],
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
                 ),
                 Text(
                   _failureMessage ?? '',

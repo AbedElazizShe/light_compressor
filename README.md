@@ -65,8 +65,8 @@ And since the library depends on Kotlin version `1.4.0`, please ensure that `1.4
 
 In order to start compression, just call [LightCompressor.compressVideo()] and pass the following parameters;
 1) `path`: the path of the provided video file to be compressed - **required**.
-2) 'destinationPath': the path where the output compressed video file should be saved - **required**.
-3) 'videoQuality': to allow choosing a video quality that can be `VideoQuality.low`, `VideoQuality.medium`, `VideoQuality.high`, or `VideoQuality.very_high` - **required**.
+2) `destinationPath`: the path where the output compressed video file should be saved - **required**.
+3) `videoQuality`: to allow choosing a video quality that can be `VideoQuality.low`, `VideoQuality.medium`, `VideoQuality.high`, or `VideoQuality.very_high` - **required**.
 4) `isMinBitRateEnabled`: to determine if the checking for a minimum bitrate threshold before compression is enabled or not. The default value is `true` - **optional**.
 5) `keepOriginalResolution`: to keep the original video height and width when compressing. This default value is `false` - **optional**.
 
@@ -110,6 +110,32 @@ In order to get the progress of compression while the video is being compressed 
 LightCompressor.progressStream
 ```
 
+You can use a stream builder for example as follows;
+
+```dart
+StreamBuilder<dynamic>(
+    stream: LightCompressor.progressStream.receiveBroadcastStream(),
+    builder: (BuildContext context,  AsyncSnapshot<dynamic> snapshot) {
+       if (snapshot.data != null && snapshot.data > 0) {
+        return Column(
+          children: <Widget>[
+           LinearProgressIndicator(
+            minHeight: 8,
+            value: snapshot.data / 100,
+           ),
+           const SizedBox(height: 8),
+           Text(
+            '${snapshot.data.toStringAsFixed(0)}%',
+             style: const TextStyle(fontSize: 20),
+           )
+         ],
+       );
+    }
+    return const SizedBox.shrink();
+  },
+),
+```
+
 For more information on how to use the plugin, refer to the [sample app](https://github.com/AbedElazizShe/light_compressor/blob/master/example/lib/main.dart)
 
 ## Compatibility
@@ -120,6 +146,7 @@ The minimum iOS version supported is 11.
 ## Dart Versions
 
 - Dart 2: >= 2.7.0
+- Flutter: >=1.20.0
 
 ## Maintainers
 
