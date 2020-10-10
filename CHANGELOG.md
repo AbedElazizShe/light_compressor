@@ -1,3 +1,9 @@
+## 0.0.5
+
+Update LightCompressor library for Android with bugs fixes.
+Added `very_low` video quality.
+Fixed the project to work in iOS 14.
+
 ## 0.0.4
 
 Updated documentation.

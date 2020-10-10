@@ -56,6 +56,7 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler, EventChannel.Str
                 val keepOriginalResolution: Boolean = call.argument<Boolean>("keepOriginalResolution")!!
 
                 val quality: VideoQuality = when (call.argument<String>("videoQuality")!!) {
+                    "very_low" -> VideoQuality.VERY_LOW
                     "low" -> VideoQuality.LOW
                     "medium" -> VideoQuality.MEDIUM
                     "high" -> VideoQuality.HIGH

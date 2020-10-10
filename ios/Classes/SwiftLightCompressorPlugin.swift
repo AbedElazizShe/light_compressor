@@ -1,8 +1,7 @@
 import Flutter
 import UIKit
-import Photos
-
-
+import Photos 
+ 
 @available(iOS 11.0, *)
 public class SwiftLightCompressorPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     
@@ -96,6 +95,8 @@ public class SwiftLightCompressorPlugin: NSObject, FlutterPlugin, FlutterStreamH
     
     private func getVideoQuality(quality: String) -> VideoQuality{
         switch quality {
+        case "very_low":
+            return VideoQuality.very_low
         case "low":
             return VideoQuality.low
         case "medium":

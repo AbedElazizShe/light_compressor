@@ -6,6 +6,9 @@ import 'package:flutter/services.dart';
 
 /// The allowed video quality to pass for compression
 enum VideoQuality {
+  /// Very low quality
+  very_low,
+
   /// Low quality
   low,
 
@@ -16,7 +19,6 @@ enum VideoQuality {
   high,
 
   /// Very high quality
-  // ignore: constant_identifier_names
   very_high,
 }
 
@@ -35,8 +37,8 @@ class LightCompressor {
   /// * [destinationPath] the path where the output compressed video file should
   /// be saved.
   /// * [videoQuality] to allow choosing a video quality that can be
-  /// [VideoQuality.low], [VideoQuality.medium], [VideoQuality.high], and
-  /// [VideoQuality.very_high].
+  /// [VideoQuality.very_low], [VideoQuality.low], [VideoQuality.medium],
+  /// [VideoQuality.high], and [VideoQuality.very_high].
   ///
   /// The optional parameters are;
   /// * [isMinBitRateEnabled] to determine if the checking for a minimum bitrate

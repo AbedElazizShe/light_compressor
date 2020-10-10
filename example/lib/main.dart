@@ -184,7 +184,7 @@ class _MyAppState extends State<MyApp> {
         path: _file.path.toString(),
         destinationPath: _desFile,
         videoQuality: VideoQuality.medium,
-        isMinBitRateEnabled: false,
+        isMinBitRateEnabled: true,
         keepOriginalResolution: false);
 
     stopwatch.stop();

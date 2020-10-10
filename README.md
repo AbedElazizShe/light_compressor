@@ -11,13 +11,11 @@ The general idea of how the library works is that, extreme high bitrate is reduc
 ## How it works
 When the video file is called to be compressed, the library checks if the user wants to set a min bitrate to avoid compressing low resolution videos. This becomes handy if you don’t want the video to be compressed every time it is to be processed to avoid having very bad quality after multiple rounds of compression. The minimum bitrate set is 2mbps.
 
-You can pass one of a 4 video qualities; `very_high`, `high`, `medium`, or `low` and the plugin will handle generating the right bitrate value for the output video.
+You can pass one of a 5 video qualities; `very_high`, `high`, `medium`, `low` OR `very_low` and the plugin will handle generating the right bitrate value for the output video.
 
 ## Demo
 
-Android             |  iOS
-:-------------------------:|:-------------------------:
-![Android-demo](https://github.com/AbedElazizShe/light_compressor/blob/master/pictures/android.gif)   |  ![iOS-demo](https://github.com/AbedElazizShe/light_compressor/blob/master/pictures/ios.gif)
+![Android-demo](https://github.com/AbedElazizShe/light_compressor/blob/master/pictures/android.gif)
 
 ## Installation
 
@@ -56,17 +54,17 @@ allprojects {
 Include this in your Module-level build.gradle file:
 
 ```groovy
-implementation 'com.github.AbedElazizShe:LightCompressor:0.7.3'
+implementation 'com.github.AbedElazizShe:LightCompressor:0.7.6'
 ```
 
-And since the library depends on Kotlin version `1.4.0`, please ensure that `1.4.0` is the minimum kotlin version in your project by changing `ext.kotlin_version` in your Project-level build.gradle file.
+And since the library depends on Kotlin version `1.4.10`, please ensure that `1.4.10` is the minimum kotlin version in your project by changing `ext.kotlin_version` in your Project-level build.gradle file.
 
 ## Usage
 
 In order to start compression, just call [LightCompressor.compressVideo()] and pass the following parameters;
 1) `path`: the path of the provided video file to be compressed - **required**.
 2) `destinationPath`: the path where the output compressed video file should be saved - **required**.
-3) `videoQuality`: to allow choosing a video quality that can be `VideoQuality.low`, `VideoQuality.medium`, `VideoQuality.high`, or `VideoQuality.very_high` - **required**.
+3) `videoQuality`: to allow choosing a video quality that can be `VideoQuality.very_low`, `VideoQuality.low`, `VideoQuality.medium`, `VideoQuality.high`, or `VideoQuality.very_high` - **required**.
 4) `isMinBitRateEnabled`: to determine if the checking for a minimum bitrate threshold before compression is enabled or not. The default value is `true` - **optional**.
 5) `keepOriginalResolution`: to keep the original video height and width when compressing. This default value is `false` - **optional**.
 
