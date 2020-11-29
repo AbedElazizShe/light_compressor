@@ -1,7 +1,7 @@
 import Flutter
 import UIKit
 import Photos 
- 
+
 @available(iOS 11.0, *)
 public class SwiftLightCompressorPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     
@@ -21,11 +21,11 @@ public class SwiftLightCompressorPlugin: NSObject, FlutterPlugin, FlutterStreamH
         switch call.method {
         case "startCompression":
             if let myArgs = call.arguments as? [String: Any?],
-                let path : String = myArgs["path"] as? String,
-                let destinationPath : String? = myArgs["destinationPath"] as? String?,
-                let isMinBitRateEnabled : Bool = myArgs["isMinBitRateEnabled"] as? Bool,
-                let keepOriginalResolution : Bool = myArgs["keepOriginalResolution"] as? Bool,
-                let videoQuality : String = myArgs["videoQuality"] as? String {
+               let path : String = myArgs["path"] as? String,
+               let destinationPath : String? = myArgs["destinationPath"] as? String?,
+               let isMinBitRateEnabled : Bool = myArgs["isMinBitRateEnabled"] as? Bool,
+               let keepOriginalResolution : Bool = myArgs["keepOriginalResolution"] as? Bool,
+               let videoQuality : String = myArgs["videoQuality"] as? String {
                 
                 var desPath: URL
                 if(destinationPath == nil){
@@ -47,9 +47,11 @@ public class SwiftLightCompressorPlugin: NSObject, FlutterPlugin, FlutterStreamH
                     progressQueue: .main,
                     progressHandler: { progress in
                         DispatchQueue.main.async { [unowned self] in
-                            self.eventSink!(Float(progress.fractionCompleted * 100))
+                            if(self.eventSink != nil){
+                                self.eventSink!(Float(progress.fractionCompleted * 100))
+                            }
                         }
-                },
+                    },
                     completion: { compressionResult in
                         
                         switch compressionResult {
@@ -72,7 +74,7 @@ public class SwiftLightCompressorPlugin: NSObject, FlutterPlugin, FlutterStreamH
                             let response: [String: Bool] = ["onCancelled": true]
                             result(response.toJson)
                         }
-                }
+                    }
                 )
             }
         case "cancelCompression":
