@@ -1,3 +1,7 @@
+## 0.0.6
+Updated dependencies.
+Fixed a crash on iOS.
+
 ## 0.0.5
 
 Update LightCompressor library for Android with bugs fixes.
