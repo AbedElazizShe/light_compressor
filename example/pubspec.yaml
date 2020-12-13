@@ -17,11 +17,11 @@ dependencies:
     path: ../
 
   cupertino_icons: ^1.0.0
-  image_picker: ^0.6.7+14
   video_player: ^1.0.1
   video_thumbnail: ^0.2.4
   ext_storage: ^1.0.3
   path_provider: ^1.6.24
+  file_picker: ^2.1.1
 
 dev_dependencies:
   flutter_test:

@@ -2,17 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:ext_storage/ext_storage.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:ext_storage/ext_storage.dart';
-import 'package:path_provider/path_provider.dart' as path;
-import 'package:image_picker/image_picker.dart';
 import 'package:light_compressor/light_compressor.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
-
 import 'package:light_compressor_example/utils/file_utils.dart';
 import 'package:light_compressor_example/video_player.dart';
+import 'package:path_provider/path_provider.dart' as path;
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,13 +23,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final ImagePicker _picker = ImagePicker();
-  PickedFile _file;
   String _desFile;
   bool _isVideoCompressed = false;
   String _displayedFile;
   int _duration;
   String _failureMessage;
+  String _filePath;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -101,9 +98,9 @@ class _MyAppState extends State<MyApp> {
                     ),
                   ),
                 const SizedBox(height: 16),
-                if (_file != null)
+                if (_filePath != null)
                   Text(
-                    'Original size: ${_getVideoSize(file: File(_file.path))}',
+                    'Original size: ${_getVideoSize(file: File(_filePath))}',
                     style: const TextStyle(fontSize: 16),
                   ),
                 const SizedBox(height: 8),
@@ -167,24 +164,31 @@ class _MyAppState extends State<MyApp> {
   // Pick a video form device's storage
   Future<void> _pickVideo() async {
     _isVideoCompressed = false;
-    _file = await _picker.getVideo(source: ImageSource.gallery);
 
-    if (_file == null) {
+    final FilePickerResult result = await FilePicker.platform.pickFiles(
+      type: FileType.video,
+    );
+
+    final PlatformFile file = result.files.first;
+
+    if (file == null) {
       return;
     }
 
+    _filePath = file.path;
+
     setState(() {
-      _displayedFile = _file.path;
+      _displayedFile = _filePath;
       _failureMessage = null;
     });
 
     _desFile = await _destinationFile;
     final Stopwatch stopwatch = Stopwatch()..start();
     final Map<String, dynamic> response = await LightCompressor.compressVideo(
-        path: _file.path.toString(),
+        path: _filePath,
         destinationPath: _desFile,
         videoQuality: VideoQuality.medium,
-        isMinBitRateEnabled: true,
+        isMinBitRateEnabled: false,
         keepOriginalResolution: false);
 
     stopwatch.stop();
