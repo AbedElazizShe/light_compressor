@@ -136,6 +136,13 @@ StreamBuilder<dynamic>(
 
 For more information on how to use the plugin, refer to the [sample app](https://github.com/AbedElazizShe/light_compressor/blob/master/example/lib/main.dart)
 
+## Reporting issues
+To report an issue, please specify the following:
+- Device name
+- Android version
+- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1XcwO_HBdTjK_hd4gam3xdVf5b0Tr1QwV/view?usp=sharing).
+
+
 ## Compatibility
 Minimum Android SDK: the plugin requires a minimum API level of 21.
 

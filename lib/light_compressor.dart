@@ -57,8 +57,8 @@ class LightCompressor {
         'path': path,
         'destinationPath': destinationPath,
         'videoQuality': videoQuality.toString().split('.').last,
-        'isMinBitRateEnabled': isMinBitRateEnabled,
-        'keepOriginalResolution': keepOriginalResolution,
+        'isMinBitRateEnabled': isMinBitRateEnabled ?? true,
+        'keepOriginalResolution': keepOriginalResolution ?? false,
       }));
 
   /// Call this function to cancel video compression process.

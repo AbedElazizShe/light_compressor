@@ -84,7 +84,7 @@ packages:
       name: file_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.6"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -120,7 +120,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.6"
+    version: "0.1.0"
   matcher:
     dependency: transitive
     description:
@@ -148,7 +148,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.24"
+    version: "1.6.27"
   path_provider_linux:
     dependency: transitive
     description:
@@ -286,7 +286,7 @@ packages:
       name: video_thumbnail
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.4"
+    version: "0.2.5+1"
   win32:
     dependency: transitive
     description:

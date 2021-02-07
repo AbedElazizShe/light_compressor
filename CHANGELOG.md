@@ -1,3 +1,6 @@
+## 0.1.0
+Bugs fixes.
+
 ## 0.0.7
 Fixed a crash at iOS the video has no sound.
 Replaced image_picker with file_picker for the sample app due to this open issue https://github.com/flutter/flutter/issues/52419
