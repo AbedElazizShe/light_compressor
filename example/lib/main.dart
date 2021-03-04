@@ -1,16 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:ext_storage/ext_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:light_compressor/light_compressor.dart';
 import 'package:light_compressor_example/utils/file_utils.dart';
 import 'package:light_compressor_example/video_player.dart';
 import 'package:path_provider/path_provider.dart' as path;
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,12 +19,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _desFile;
+  late String _desFile;
+  String? _displayedFile;
+  late int _duration;
+  String? _failureMessage;
+  String? _filePath;
   bool _isVideoCompressed = false;
-  String _displayedFile;
-  int _duration;
-  String _failureMessage;
-  String _filePath;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -41,7 +37,7 @@ class _MyAppState extends State<MyApp> {
           appBar: AppBar(
             title: const Text('Compressor Sample'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: const Text(
                   'Cancel',
                   style: TextStyle(color: Colors.white, fontSize: 18),
@@ -55,52 +51,9 @@ class _MyAppState extends State<MyApp> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                if (_displayedFile != null)
-                  Builder(
-                    builder: (BuildContext context) => InkWell(
-                      child: Stack(
-                        children: <Widget>[
-                          FutureBuilder<Uint8List>(
-                              future: _getVideoThumbnail(path: _displayedFile),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<Uint8List> thumbnailFile) {
-                                if (thumbnailFile.data != null) {
-                                  return Image.memory(
-                                    thumbnailFile.data,
-                                    height: 240,
-                                    width: double.infinity,
-                                  );
-                                } else {
-                                  return const SizedBox.shrink();
-                                }
-                              }),
-                          const Positioned.fill(
-                            child: Align(
-                              child: Icon(
-                                Icons.play_circle_outline,
-                                color: Colors.white,
-                                size: 42,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      onTap: () {
-                        Navigator.push<dynamic>(
-                          context,
-                          MaterialPageRoute<dynamic>(
-                            builder: (_) => VideoPlayerScreen(
-                              path: _desFile,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                const SizedBox(height: 16),
                 if (_filePath != null)
                   Text(
-                    'Original size: ${_getVideoSize(file: File(_filePath))}',
+                    'Original size: ${_getVideoSize(file: File(_filePath!))}',
                     style: const TextStyle(fontSize: 16),
                   ),
                 const SizedBox(height: 8),
@@ -146,6 +99,23 @@ class _MyAppState extends State<MyApp> {
                     },
                   ),
                 ),
+                const SizedBox(height: 24),
+                if (_displayedFile != null)
+                  Builder(
+                    builder: (BuildContext context) => Container(
+                      alignment: Alignment.center,
+                      child: OutlinedButton(
+                          onPressed: () => Navigator.push<dynamic>(
+                                context,
+                                MaterialPageRoute<dynamic>(
+                                  builder: (_) => VideoPlayerScreen(
+                                    path: _desFile,
+                                  ),
+                                ),
+                              ),
+                          child: const Text('Play Video')),
+                    ),
+                  ),
                 Text(
                   _failureMessage ?? '',
                 )
@@ -165,11 +135,11 @@ class _MyAppState extends State<MyApp> {
   Future<void> _pickVideo() async {
     _isVideoCompressed = false;
 
-    final FilePickerResult result = await FilePicker.platform.pickFiles(
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.video,
     );
 
-    final PlatformFile file = result.files.first;
+    final PlatformFile? file = result!.files.first;
 
     if (file == null) {
       return;
@@ -178,14 +148,13 @@ class _MyAppState extends State<MyApp> {
     _filePath = file.path;
 
     setState(() {
-      _displayedFile = _filePath;
       _failureMessage = null;
     });
 
     _desFile = await _destinationFile;
     final Stopwatch stopwatch = Stopwatch()..start();
-    final Map<String, dynamic> response = await LightCompressor.compressVideo(
-        path: _filePath,
+    final Map<String, dynamic>? response = await LightCompressor.compressVideo(
+        path: _filePath!,
         destinationPath: _desFile,
         videoQuality: VideoQuality.medium,
         isMinBitRateEnabled: false,
@@ -196,7 +165,7 @@ class _MyAppState extends State<MyApp> {
         Duration(milliseconds: stopwatch.elapsedMilliseconds);
     _duration = duration.inSeconds;
 
-    if (response['onSuccess'] != null) {
+    if (response!['onSuccess'] != null) {
       _desFile = response['onSuccess'];
 
       setState(() {
@@ -218,8 +187,10 @@ Future<String> get _destinationFile async {
   String directory;
   final String videoName = '${DateTime.now().millisecondsSinceEpoch}.mp4';
   if (Platform.isAndroid) {
-    directory = await ExtStorage.getExternalStoragePublicDirectory(
-        ExtStorage.DIRECTORY_MOVIES);
+    // Handle this part the way you want to save it in any directory you wish.
+    final List<Directory>? dir = await path.getExternalStorageDirectories(
+        type: path.StorageDirectory.movies);
+    directory = dir!.first.path;
     return File('$directory/$videoName').path;
   } else {
     final Directory dir = await path.getLibraryDirectory();
@@ -228,17 +199,4 @@ Future<String> get _destinationFile async {
   }
 }
 
-String _getVideoSize({@required File file}) =>
-    formatBytes(file.lengthSync(), 2);
-
-Future<Uint8List> _getVideoThumbnail({@required String path}) async {
-  try {
-    return await VideoThumbnail.thumbnailData(
-      video: path,
-      imageFormat: ImageFormat.JPEG,
-      quality: 100,
-    );
-  } on PlatformException catch (_) {
-    return Future<Uint8List>.value();
-  }
-}
+String _getVideoSize({required File file}) => formatBytes(file.lengthSync(), 2);

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// The allowed video quality to pass for compression
@@ -45,23 +44,24 @@ class LightCompressor {
   /// threshold before compression is enabled or not. This defaults to `true`.
   /// * [keepOriginalResolution] to keep the original video height and width when
   /// compressing. This defaults to `false`.
-  static Future<Map<String, dynamic>> compressVideo({
-    @required String path,
-    @required String destinationPath,
-    @required VideoQuality videoQuality,
+  static Future<Map<String, dynamic>?> compressVideo({
+    required String path,
+    required String destinationPath,
+    required VideoQuality videoQuality,
     bool isMinBitRateEnabled = true,
     bool keepOriginalResolution = false,
   }) async =>
-      // ignore: always_specify_types
-      jsonDecode(await _channel.invokeMethod('startCompression', {
+      jsonDecode(await _channel
+          .invokeMethod<dynamic>('startCompression', <String, dynamic>{
         'path': path,
         'destinationPath': destinationPath,
         'videoQuality': videoQuality.toString().split('.').last,
-        'isMinBitRateEnabled': isMinBitRateEnabled ?? true,
-        'keepOriginalResolution': keepOriginalResolution ?? false,
+        'isMinBitRateEnabled': isMinBitRateEnabled,
+        'keepOriginalResolution': keepOriginalResolution,
       }));
 
   /// Call this function to cancel video compression process.
-  static Future<Map<String, dynamic>> cancelCompression() async =>
-      jsonDecode(await _channel.invokeMethod('cancelCompression'));
+  static Future<Map<String, dynamic>?> cancelCompression() async =>
+      jsonDecode(await (_channel.invokeMethod<dynamic>('cancelCompression')
+          as FutureOr<String>));
 }

@@ -2,14 +2,14 @@ group 'com.abedelazizshe.light_compressor'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.20'
     repositories {
         google()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath 'com.android.tools.build:gradle:4.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -40,8 +40,8 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.0"
-    implementation 'com.github.AbedElazizShe:LightCompressor:0.7.9'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2"
+    implementation 'com.github.AbedElazizShe:LightCompressor:0.8.0'
     implementation 'com.google.code.gson:gson:2.8.6'
 }

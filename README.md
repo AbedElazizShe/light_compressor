@@ -54,7 +54,7 @@ allprojects {
 Include this in your Module-level build.gradle file:
 
 ```groovy
-implementation 'com.github.AbedElazizShe:LightCompressor:0.7.9'
+implementation 'com.github.AbedElazizShe:LightCompressor:0.8.0'
 ```
 
 And since the library depends on Kotlin version `1.4.10`, please ensure that `1.4.10` is the minimum kotlin version in your project by changing `ext.kotlin_version` in your Project-level build.gradle file.
@@ -140,7 +140,7 @@ For more information on how to use the plugin, refer to the [sample app](https:/
 To report an issue, please specify the following:
 - Device name
 - Android version
-- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1XcwO_HBdTjK_hd4gam3xdVf5b0Tr1QwV/view?usp=sharing).
+- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1a5DBa2SmK2QjfNrBV9NbnNkhZoVdYna9/view?usp=sharing).
 
 
 ## Compatibility
@@ -150,7 +150,7 @@ The minimum iOS version supported is 11.
 
 ## Dart Versions
 
-- Dart 2: >= 2.7.0
+- Dart 2: >= 2.12.0
 - Flutter: >=1.20.0
 
 ## Maintainers

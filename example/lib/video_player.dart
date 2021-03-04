@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+/// Video player screen.
 class VideoPlayerScreen extends StatefulWidget {
-  VideoPlayerScreen({this.path, Key key}) : super(key: key);
+  /// Video player widget that shows a video from the provided [path].
+  const VideoPlayerScreen({required this.path, Key? key}) : super(key: key);
 
+  /// The path of the video.
   final String path;
 
   @override
@@ -13,7 +16,7 @@ class VideoPlayerScreen extends StatefulWidget {
 }
 
 class _VideoPlayerState extends State<VideoPlayerScreen> {
-  VideoPlayerController _controller;
+  late VideoPlayerController _controller;
 
   @override
   void initState() {
@@ -27,16 +30,14 @@ class _VideoPlayerState extends State<VideoPlayerScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: _controller.value.initialized
+  Widget build(BuildContext context) => Center(
+      child: _controller.value.isInitialized
           ? AspectRatio(
               aspectRatio: _controller.value.aspectRatio,
               child: VideoPlayer(_controller),
             )
-          : Container(),
+          : null,
     );
-  }
 
   @override
   void dispose() {
