@@ -39,9 +39,9 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2"
-    implementation 'com.github.AbedElazizShe:LightCompressor:0.8.1'
+    implementation 'com.github.AbedElazizShe:LightCompressor:0.9.0'
     implementation 'com.google.code.gson:gson:2.8.6'
 }

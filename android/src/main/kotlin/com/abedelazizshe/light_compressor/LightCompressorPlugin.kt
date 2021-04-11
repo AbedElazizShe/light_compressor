@@ -24,7 +24,8 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
 /** LightCompressorPlugin */
-class LightCompressorPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler, ActivityAware {
+class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
+        EventChannel.StreamHandler, ActivityAware {
 
     companion object {
         const val CHANNEL = "light_compressor"
@@ -94,9 +95,9 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler, EventChannel.Str
             keepOriginalResolution: Boolean,
     ) {
         VideoCompressor.start(
-                path,
-                destinationPath,
-                object : CompressionListener {
+                srcPath = path,
+                destPath = destinationPath,
+                listener = object : CompressionListener {
                     override fun onProgress(percent: Float) {
                         Handler(Looper.getMainLooper()).post {
                             eventSink?.success(percent)
@@ -119,7 +120,7 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler, EventChannel.Str
                         }
                     }
                 },
-                quality,
+                quality = quality,
                 isMinBitRateEnabled = isMinBitRateEnabled,
                 keepOriginalResolution = keepOriginalResolution,
         )

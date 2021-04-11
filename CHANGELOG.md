@@ -1,3 +1,7 @@
+## 1.0.2
+Updated Android dependency.
+Minor code refactor and cleanup
+
 ## 1.0.1
 Bugs fixes.
 

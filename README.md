@@ -54,7 +54,7 @@ allprojects {
 Include this in your Module-level build.gradle file:
 
 ```groovy
-implementation 'com.github.AbedElazizShe:LightCompressor:0.8.1'
+implementation 'com.github.AbedElazizShe:LightCompressor:0.9.0'
 ```
 
 And since the library depends on Kotlin version `1.4.10`, please ensure that `1.4.10` is the minimum kotlin version in your project by changing `ext.kotlin_version` in your Project-level build.gradle file.
@@ -140,7 +140,7 @@ For more information on how to use the plugin, refer to the [sample app](https:/
 To report an issue, please specify the following:
 - Device name
 - Android version
-- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1a5DBa2SmK2QjfNrBV9NbnNkhZoVdYna9/view?usp=sharing).
+- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1ZQLRfZbtNH2RIk4XeGYgfaNTkofVmcOr/view?usp=sharing).
 
 
 ## Compatibility
