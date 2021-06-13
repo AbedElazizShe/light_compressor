@@ -158,7 +158,8 @@ class _MyAppState extends State<MyApp> {
         destinationPath: _desFile,
         videoQuality: VideoQuality.medium,
         isMinBitRateEnabled: false,
-        keepOriginalResolution: false);
+        keepOriginalResolution: false,
+        iosSaveInGallery: false);
 
     stopwatch.stop();
     final Duration duration =

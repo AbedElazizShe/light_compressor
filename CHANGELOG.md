@@ -1,3 +1,7 @@
+## 1.0.3
+Fixed iOS crash when the video has no audio.
+Allowed passing `iosSaveInGallery (true/false)` to control saving the compressed video in iOS.
+
 ## 1.0.2
 Updated Android dependency.
 Minor code refactor and cleanup

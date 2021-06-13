@@ -34,9 +34,18 @@ Add the following to your _Info.plist_ file, located in `<project root>/ios/Runn
 
 Add the following permissions in AndroidManifest.xml:
 
+**API < 29**
+
 ```xml
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+android:maxSdkVersion="28"/>
+```
+
+**API >= 29**
+
+```xml
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 ```
 
 Include this in your Project-level build.gradle file:
@@ -67,6 +76,7 @@ In order to start compression, just call [LightCompressor.compressVideo()] and p
 3) `videoQuality`: to allow choosing a video quality that can be `VideoQuality.very_low`, `VideoQuality.low`, `VideoQuality.medium`, `VideoQuality.high`, or `VideoQuality.very_high` - **required**.
 4) `isMinBitRateEnabled`: to determine if the checking for a minimum bitrate threshold before compression is enabled or not. The default value is `true` - **optional**.
 5) `keepOriginalResolution`: to keep the original video height and width when compressing. This default value is `false` - **optional**.
+6) `iosSaveInGallery`: to avoid saving the output file in gallery.
 
 ```dart
 final Map<String, dynamic> response = await LightCompressor.compressVideo(
@@ -140,13 +150,19 @@ For more information on how to use the plugin, refer to the [sample app](https:/
 To report an issue, please specify the following:
 - Device name
 - Android version
-- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1ZQLRfZbtNH2RIk4XeGYgfaNTkofVmcOr/view?usp=sharing).
+- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1f6le0IyTqG2apMdwywNkz0ZgUu_M9EXn/view?usp=sharing).
 
 
 ## Compatibility
 Minimum Android SDK: the plugin requires a minimum API level of 21.
 
 The minimum iOS version supported is 11.
+
+## What's next?
+
+- Allow passing a custom video width, height, and bitrate to avoid allowing the library to auto-generate the values.
+- Improve the speed of compression.
+- Simplify the plugin's APIs to make it easier to implement.
 
 ## Dart Versions
 

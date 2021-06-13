@@ -44,12 +44,15 @@ class LightCompressor {
   /// threshold before compression is enabled or not. This defaults to `true`.
   /// * [keepOriginalResolution] to keep the original video height and width when
   /// compressing. This defaults to `false`.
+  /// * [iosSaveInGallery] to determine if the video should be saved in iOS
+  /// Gallery or not.
   static Future<Map<String, dynamic>?> compressVideo({
     required String path,
     required String destinationPath,
     required VideoQuality videoQuality,
     bool isMinBitRateEnabled = true,
     bool keepOriginalResolution = false,
+    bool iosSaveInGallery = true,
   }) async =>
       jsonDecode(await _channel
           .invokeMethod<dynamic>('startCompression', <String, dynamic>{
@@ -58,6 +61,7 @@ class LightCompressor {
         'videoQuality': videoQuality.toString().split('.').last,
         'isMinBitRateEnabled': isMinBitRateEnabled,
         'keepOriginalResolution': keepOriginalResolution,
+        'saveInGallery': iosSaveInGallery,
       }));
 
   /// Call this function to cancel video compression process.
