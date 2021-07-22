@@ -116,10 +116,10 @@ Result response can be one of the following;
     }
 ```
 
-In order to get the progress of compression while the video is being compressed the following to receive a broadcast stream;
+In order to get the progress of compression while the video is being compressed the following to receive a stream;
 
 ```dart
-LightCompressor.progressStream
+_lightCompressor.onProgressUpdated
 ```
 
 You can use a stream builder for example as follows;

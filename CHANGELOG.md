@@ -1,9 +1,17 @@
+## 1.1.1
+Updated documentation.
+
 ## 1.1.0
 **Breaking**: LightCompressor is now following Singleton pattern, call the methods using `LightCompressor()`
+
 **Breaking**: `compressVideo()` returns a `dynamic` response, to check for success, failure, or cancellation; use `is OnSuccess`, `is OnFailure`, and `is onCancelled` respectively. Refer to the sample app for more details.
+
 **Breaking**: Progress change stream has been renamed and could be called now as `LightCompressor().onProgressUpdated`
+
 Bumped Android's LightCompressor library to version 0.9.4.
+
 Several bugs fixes and speed improvements.
+
 Enabled the usage of software encoders if hardware encoders don't exist, such as in certain emulators.
 
 ## 1.0.3
