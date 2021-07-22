@@ -2,23 +2,20 @@ name: light_compressor_example
 description: Demonstrates how to use the light_compressor plugin.
 version: 0.0.1
 
-# The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.3
+  file_picker: ^3.0.3
   flutter:
     sdk: flutter
-  path_provider: ^2.0.1
-
   light_compressor:
     path: ../
-  video_player: ^2.1.1
-  file_picker: ^3.0.1
+  path_provider: ^2.0.2
+  video_player: ^2.1.10
 
 dev_dependencies:
   flutter_test:

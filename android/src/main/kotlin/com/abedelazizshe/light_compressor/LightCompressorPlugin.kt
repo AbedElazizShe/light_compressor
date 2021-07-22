@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import com.abedelazizshe.lightcompressorlibrary.CompressionListener
 import com.abedelazizshe.lightcompressorlibrary.VideoCompressor
 import com.abedelazizshe.lightcompressorlibrary.VideoQuality
+import com.abedelazizshe.lightcompressorlibrary.config.Configuration
 import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -25,7 +26,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 
 /** LightCompressorPlugin */
 class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
-        EventChannel.StreamHandler, ActivityAware {
+    EventChannel.StreamHandler, ActivityAware {
 
     companion object {
         const val CHANNEL = "light_compressor"
@@ -44,37 +45,73 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL)
         channel.setMethodCallHandler(this)
 
-        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, STREAM)
+        eventChannel =
+            EventChannel(flutterPluginBinding.binaryMessenger, STREAM)
         eventChannel.setStreamHandler(this)
     }
 
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    override fun onMethodCall(
+        @NonNull call: MethodCall,
+        @NonNull result: Result
+    ) {
         when (call.method) {
             "startCompression" -> {
                 val path: String = call.argument<String>("path")!!
-                val destinationPath: String = call.argument<String>("destinationPath")!!
-                val isMinBitRateEnabled: Boolean = call.argument<Boolean>("isMinBitRateEnabled")!!
-                val keepOriginalResolution: Boolean = call.argument<Boolean>("keepOriginalResolution")!!
+                val destinationPath: String =
+                    call.argument<String>("destinationPath")!!
+                val isMinBitRateEnabled: Boolean =
+                    call.argument<Boolean>("isMinBitRateEnabled")!!
+                val keepOriginalResolution: Boolean =
+                    call.argument<Boolean>("keepOriginalResolution")!!
 
-                val quality: VideoQuality = when (call.argument<String>("videoQuality")!!) {
-                    "very_low" -> VideoQuality.VERY_LOW
-                    "low" -> VideoQuality.LOW
-                    "medium" -> VideoQuality.MEDIUM
-                    "high" -> VideoQuality.HIGH
-                    "very_high" -> VideoQuality.VERY_HIGH
-                    else -> VideoQuality.MEDIUM
-                }
+                val quality: VideoQuality =
+                    when (call.argument<String>("videoQuality")!!) {
+                        "very_low" -> VideoQuality.VERY_LOW
+                        "low" -> VideoQuality.LOW
+                        "medium" -> VideoQuality.MEDIUM
+                        "high" -> VideoQuality.HIGH
+                        "very_high" -> VideoQuality.VERY_HIGH
+                        else -> VideoQuality.MEDIUM
+                    }
 
                 if (Build.VERSION.SDK_INT >= 23) {
-                    val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    val permissions = arrayOf(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )
                     if (!hasPermissions(applicationContext, permissions)) {
-                        ActivityCompat.requestPermissions(activity, permissions, 1)
-                        compressVideo(path, destinationPath, result, quality, isMinBitRateEnabled, keepOriginalResolution)
+                        ActivityCompat.requestPermissions(
+                            activity,
+                            permissions,
+                            1
+                        )
+                        compressVideo(
+                            path,
+                            destinationPath,
+                            result,
+                            quality,
+                            isMinBitRateEnabled,
+                            keepOriginalResolution
+                        )
                     } else {
-                        compressVideo(path, destinationPath, result, quality, isMinBitRateEnabled, keepOriginalResolution)
+                        compressVideo(
+                            path,
+                            destinationPath,
+                            result,
+                            quality,
+                            isMinBitRateEnabled,
+                            keepOriginalResolution
+                        )
                     }
                 } else {
-                    compressVideo(path, destinationPath, result, quality, isMinBitRateEnabled, keepOriginalResolution)
+                    compressVideo(
+                        path,
+                        destinationPath,
+                        result,
+                        quality,
+                        isMinBitRateEnabled,
+                        keepOriginalResolution
+                    )
                 }
             }
             "cancelCompression" -> {
@@ -87,42 +124,66 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
     }
 
     private fun compressVideo(
-            path: String,
-            destinationPath: String,
-            result: Result,
-            quality: VideoQuality,
-            isMinBitRateEnabled: Boolean,
-            keepOriginalResolution: Boolean,
+        path: String,
+        destinationPath: String,
+        result: Result,
+        quality: VideoQuality,
+        isMinBitRateEnabled: Boolean,
+        keepOriginalResolution: Boolean,
     ) {
         VideoCompressor.start(
-                srcPath = path,
-                destPath = destinationPath,
-                listener = object : CompressionListener {
-                    override fun onProgress(percent: Float) {
-                        Handler(Looper.getMainLooper()).post {
-                            eventSink?.success(percent)
-                        }
+            srcPath = path,
+            destPath = destinationPath,
+            listener = object : CompressionListener {
+                override fun onProgress(percent: Float) {
+                    Handler(Looper.getMainLooper()).post {
+                        eventSink?.success(percent)
                     }
+                }
 
-                    override fun onStart() {}
+                override fun onStart() {}
 
-                    override fun onSuccess() {
-                        result.success(gson.toJson(buildResponseBody("onSuccess", destinationPath)))
+                override fun onSuccess() {
+                    result.success(
+                        gson.toJson(
+                            buildResponseBody(
+                                "onSuccess",
+                                destinationPath
+                            )
+                        )
+                    )
+                }
+
+                override fun onFailure(failureMessage: String) {
+                    result.success(
+                        gson.toJson(
+                            buildResponseBody(
+                                "onFailure",
+                                failureMessage
+                            )
+                        )
+                    )
+                }
+
+                override fun onCancelled() {
+                    Handler(Looper.getMainLooper()).post {
+                        result.success(
+                            gson.toJson(
+                                buildResponseBody(
+                                    "onCancelled",
+                                    true
+                                )
+                            )
+                        )
                     }
-
-                    override fun onFailure(failureMessage: String) {
-                        result.success(gson.toJson(buildResponseBody("onFailure", failureMessage)))
-                    }
-
-                    override fun onCancelled() {
-                        Handler(Looper.getMainLooper()).post {
-                            result.success(gson.toJson(buildResponseBody("onCancelled", true)))
-                        }
-                    }
-                },
+                }
+            },
+            configureWith = Configuration(
                 quality = quality,
                 isMinBitRateEnabled = isMinBitRateEnabled,
                 keepOriginalResolution = keepOriginalResolution,
+            )
+
         )
     }
 
@@ -139,12 +200,22 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
         eventSink = null
     }
 
-    private fun buildResponseBody(tag: String, response: Any): Map<String, Any> = mapOf(tag to response)
+    private fun buildResponseBody(
+        tag: String,
+        response: Any
+    ): Map<String, Any> = mapOf(tag to response)
 
-    private fun hasPermissions(context: Context?, permissions: Array<String>): Boolean {
+    private fun hasPermissions(
+        context: Context?,
+        permissions: Array<String>
+    ): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null) {
             for (permission in permissions) {
-                if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(
+                        context,
+                        permission
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
                     return false
                 }
             }

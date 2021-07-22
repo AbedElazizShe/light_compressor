@@ -6,7 +6,7 @@ import 'package:video_player/video_player.dart';
 /// Video player screen.
 class VideoPlayerScreen extends StatefulWidget {
   /// Video player widget that shows a video from the provided [path].
-  const VideoPlayerScreen({required this.path, Key? key}) : super(key: key);
+  const VideoPlayerScreen(this.path);
 
   /// The path of the video.
   final String path;
@@ -23,10 +23,10 @@ class _VideoPlayerState extends State<VideoPlayerScreen> {
     super.initState();
     _controller = VideoPlayerController.file(File(widget.path))
       ..initialize().then((_) {
-        setState(() {});
+        setState(() {
+          _controller.play();
+        });
       });
-
-    _controller.play();
   }
 
   @override

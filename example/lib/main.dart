@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:light_compressor/light_compressor.dart';
+import 'package:light_compressor/compressor.dart';
 import 'package:light_compressor_example/utils/file_utils.dart';
 import 'package:light_compressor_example/video_player.dart';
 import 'package:path_provider/path_provider.dart' as path;
@@ -25,6 +25,8 @@ class _MyAppState extends State<MyApp> {
   String? _failureMessage;
   String? _filePath;
   bool _isVideoCompressed = false;
+
+  final LightCompressor _lightCompressor = LightCompressor();
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -75,9 +77,8 @@ class _MyAppState extends State<MyApp> {
                 const SizedBox(height: 16),
                 Visibility(
                   visible: !_isVideoCompressed,
-                  child: StreamBuilder<dynamic>(
-                    stream:
-                        LightCompressor.progressStream.receiveBroadcastStream(),
+                  child: StreamBuilder<double>(
+                    stream: _lightCompressor.onProgressUpdated,
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.data != null && snapshot.data > 0) {
@@ -108,9 +109,7 @@ class _MyAppState extends State<MyApp> {
                           onPressed: () => Navigator.push<dynamic>(
                                 context,
                                 MaterialPageRoute<dynamic>(
-                                  builder: (_) => VideoPlayerScreen(
-                                    path: _desFile,
-                                  ),
+                                  builder: (_) => VideoPlayerScreen(_desFile),
                                 ),
                               ),
                           child: const Text('Play Video')),
@@ -153,7 +152,7 @@ class _MyAppState extends State<MyApp> {
 
     _desFile = await _destinationFile;
     final Stopwatch stopwatch = Stopwatch()..start();
-    final Map<String, dynamic>? response = await LightCompressor.compressVideo(
+    final dynamic response = await _lightCompressor.compressVideo(
         path: _filePath!,
         destinationPath: _desFile,
         videoQuality: VideoQuality.medium,
@@ -166,20 +165,19 @@ class _MyAppState extends State<MyApp> {
         Duration(milliseconds: stopwatch.elapsedMilliseconds);
     _duration = duration.inSeconds;
 
-    if (response!['onSuccess'] != null) {
-      _desFile = response['onSuccess'];
+    if (response is OnSuccess) {
+      _desFile = response.destinationPath;
 
       setState(() {
         _displayedFile = _desFile;
         _isVideoCompressed = true;
       });
-    } else if (response['onFailure'] != null) {
-      print(response['onFailure']);
+    } else if (response is OnFailure) {
       setState(() {
-        _failureMessage = response['onFailure'];
+        _failureMessage = response.message;
       });
-    } else if (response['onCancelled'] != null) {
-      print(response['onCancelled']);
+    } else if (response is OnCancelled) {
+      print(response.isCancelled);
     }
   }
 }

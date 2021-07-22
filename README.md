@@ -63,14 +63,14 @@ allprojects {
 Include this in your Module-level build.gradle file:
 
 ```groovy
-implementation 'com.github.AbedElazizShe:LightCompressor:0.9.0'
+implementation 'com.github.AbedElazizShe:LightCompressor:0.9.4'
 ```
 
-And since the library depends on Kotlin version `1.4.10`, please ensure that `1.4.10` is the minimum kotlin version in your project by changing `ext.kotlin_version` in your Project-level build.gradle file.
+And since the library depends on Kotlin version `1.5.21`, please ensure that `1.5.21` is the minimum kotlin version in your project by changing `ext.kotlin_version` in your Project-level build.gradle file.
 
 ## Usage
 
-In order to start compression, just call [LightCompressor.compressVideo()] and pass the following parameters;
+In order to start compression, just call [LightCompressor().compressVideo()] and pass the following parameters;
 1) `path`: the path of the provided video file to be compressed - **required**.
 2) `destinationPath`: the path where the output compressed video file should be saved - **required**.
 3) `videoQuality`: to allow choosing a video quality that can be `VideoQuality.very_low`, `VideoQuality.low`, `VideoQuality.medium`, `VideoQuality.high`, or `VideoQuality.very_high` - **required**.
@@ -79,7 +79,11 @@ In order to start compression, just call [LightCompressor.compressVideo()] and p
 6) `iosSaveInGallery`: to avoid saving the output file in gallery.
 
 ```dart
-final Map<String, dynamic> response = await LightCompressor.compressVideo(
+import 'package:light_compressor/compressor.dart';
+
+
+final LightCompressor _lightCompressor = LightCompressor();
+final dynamic response = await _lightCompressor.compressVideo(
   path: _sourcePath,
   destinationPath: _destinationPath,
   videoQuality: VideoQuality.medium,
@@ -90,7 +94,7 @@ final Map<String, dynamic> response = await LightCompressor.compressVideo(
 The plugin allows cancelling the compression by calling;
 
 ```dart
-LightCompressor.cancelCompression();
+_lightCompressor.cancelCompression();
 ```
 
 Result response can be one of the following;
@@ -99,16 +103,16 @@ Result response can be one of the following;
 - **onCancelled**: if `cancelCompression()` was called.
 
 ```dart
-   if (response['onSuccess'] != null) {
-      final String outputFile = response['onSuccess'];
+   if (response is OnSuccess) {
+      final String outputFile = response.destinationPath;
       // use the file
 
-    } else if (response['onFailure'] != null) {
+    } else if (response is OnFailure) {
       // failure message
-      print(response['onFailure']);
+      print(response.message);
 
-    } else if (response['onCancelled'] != null) {
-      print(response['onCancelled']);
+    } else if (response is OnCancelled) {
+      print(response.isCancelled);
     }
 ```
 
@@ -121,26 +125,13 @@ LightCompressor.progressStream
 You can use a stream builder for example as follows;
 
 ```dart
-StreamBuilder<dynamic>(
-    stream: LightCompressor.progressStream.receiveBroadcastStream(),
+StreamBuilder<double>(
+    stream: _lightCompressor.onProgressUpdated,
     builder: (BuildContext context,  AsyncSnapshot<dynamic> snapshot) {
        if (snapshot.data != null && snapshot.data > 0) {
-        return Column(
-          children: <Widget>[
-           LinearProgressIndicator(
-            minHeight: 8,
-            value: snapshot.data / 100,
-           ),
-           const SizedBox(height: 8),
-           Text(
-            '${snapshot.data.toStringAsFixed(0)}%',
-             style: const TextStyle(fontSize: 20),
-           )
-         ],
-       );
-    }
-    return const SizedBox.shrink();
-  },
+         // --> use snapshot.data
+       }
+    },
 ),
 ```
 
@@ -150,7 +141,7 @@ For more information on how to use the plugin, refer to the [sample app](https:/
 To report an issue, please specify the following:
 - Device name
 - Android version
-- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1f6le0IyTqG2apMdwywNkz0ZgUu_M9EXn/view?usp=sharing).
+- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1yXTX9EnodRd1Bsw7UhAQsf6n3zJ9_u0Z/view?usp=sharing).
 
 
 ## Compatibility

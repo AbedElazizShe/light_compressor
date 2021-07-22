@@ -1,6 +1,6 @@
 name: light_compressor
 description: A powerful and easy-to-use video compression plugin for Flutter.
-version: 1.0.3
+version: 1.1.0
 repository: https://github.com/AbedElazizShe/light_compressor
 issue_tracker: https://github.com/AbedElazizShe/light_compressor/issues
 homepage: https://github.com/AbedElazizShe
@@ -17,15 +17,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
-  # This section identifies this Flutter project as a plugin project.
-  # The 'pluginClass' and Android 'package' identifiers should not ordinarily
-  # be modified. They are used by the tooling to maintain consistency when
-  # adding or updating assets for this project.
   plugin:
     platforms:
       android:
