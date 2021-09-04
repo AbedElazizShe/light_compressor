@@ -1,3 +1,10 @@
+## 1.2.0
+**BREAKING**: Renamed isMinBitRateEnabled to isMinBitrateCheckEnabled
+Passing frameRate value to the compressor is now allowed
+Redefined the bitrate values for each of the Qualities
+Compression speed is improved.
+Bugs fixes related to codec profile and audio track.
+
 ## 1.1.1
 Updated documentation.
 

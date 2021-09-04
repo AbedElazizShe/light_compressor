@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:light_compressor/compression_result.dart';
+import 'package:light_compressor/src/compression_result.dart';
 
 /// The allowed video quality to pass for compression
 enum VideoQuality {
@@ -59,18 +59,17 @@ class LightCompressor {
   /// [VideoQuality.high], and [VideoQuality.very_high].
   ///
   /// The optional parameters are;
-  /// * [isMinBitRateEnabled] to determine if the checking for a minimum bitrate
+  /// * [isMinBitrateCheckEnabled] to determine if the checking for a minimum bitrate
   /// threshold before compression is enabled or not. This defaults to `true`.
-  /// * [keepOriginalResolution] to keep the original video height and width when
-  /// compressing. This defaults to `false`.
+  /// * [frameRate] custom frame rate value
   /// * [iosSaveInGallery] to determine if the video should be saved in iOS
   /// Gallery or not.
   Future<dynamic> compressVideo({
     required String path,
     required String destinationPath,
     required VideoQuality videoQuality,
-    bool isMinBitRateEnabled = true,
-    bool keepOriginalResolution = false,
+    int? frameRate,
+    bool isMinBitrateCheckEnabled = true,
     bool iosSaveInGallery = true,
   }) async {
     final Map<String, dynamic> response = jsonDecode(await _channel
@@ -78,8 +77,8 @@ class LightCompressor {
       'path': path,
       'destinationPath': destinationPath,
       'videoQuality': videoQuality.toString().split('.').last,
-      'isMinBitRateEnabled': isMinBitRateEnabled,
-      'keepOriginalResolution': keepOriginalResolution,
+      'frameRate': frameRate,
+      'isMinBitrateCheckEnabled': isMinBitrateCheckEnabled,
       'saveInGallery': iosSaveInGallery,
     }));
 

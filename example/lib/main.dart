@@ -156,8 +156,8 @@ class _MyAppState extends State<MyApp> {
         path: _filePath!,
         destinationPath: _desFile,
         videoQuality: VideoQuality.medium,
-        isMinBitRateEnabled: false,
-        keepOriginalResolution: false,
+        frameRate: 24,
+        isMinBitrateCheckEnabled: false,
         iosSaveInGallery: false);
 
     stopwatch.stop();

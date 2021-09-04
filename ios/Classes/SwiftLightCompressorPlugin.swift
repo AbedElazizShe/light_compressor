@@ -23,8 +23,8 @@ public class SwiftLightCompressorPlugin: NSObject, FlutterPlugin, FlutterStreamH
             if let myArgs = call.arguments as? [String: Any?],
                let path : String = myArgs["path"] as? String,
                let destinationPath : String? = myArgs["destinationPath"] as? String?,
-               let isMinBitRateEnabled : Bool = myArgs["isMinBitRateEnabled"] as? Bool,
-               let keepOriginalResolution : Bool = myArgs["keepOriginalResolution"] as? Bool,
+               let isMinBitrateCheckEnabled : Bool = myArgs["isMinBitrateCheckEnabled"] as? Bool,
+               let frameRate : Int = myArgs["frameRate"] as? Int,
                let saveInGallery : Bool = myArgs["saveInGallery"] as? Bool,
                let videoQuality : String = myArgs["videoQuality"] as? String {
 
@@ -43,8 +43,8 @@ public class SwiftLightCompressorPlugin: NSObject, FlutterPlugin, FlutterStreamH
                     source: URL(fileURLWithPath: path),
                     destination: desPath,
                     quality: getVideoQuality(quality: videoQuality),
-                    isMinBitRateEnabled: isMinBitRateEnabled,
-                    keepOriginalResolution: keepOriginalResolution,
+                    frameRate: frameRate,
+                    isMinBitrateCheckEnabled: isMinBitrateCheckEnabled,
                     progressQueue: .main,
                     progressHandler: { progress in
                         DispatchQueue.main.async { [unowned self] in

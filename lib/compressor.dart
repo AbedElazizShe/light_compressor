@@ -1,2 +1,2 @@
-export 'compression_result.dart';
-export 'light_compressor.dart';
+export 'src/compression_result.dart';
+export 'src/light_compressor.dart';

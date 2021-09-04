@@ -59,10 +59,10 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                 val path: String = call.argument<String>("path")!!
                 val destinationPath: String =
                     call.argument<String>("destinationPath")!!
-                val isMinBitRateEnabled: Boolean =
-                    call.argument<Boolean>("isMinBitRateEnabled")!!
-                val keepOriginalResolution: Boolean =
-                    call.argument<Boolean>("keepOriginalResolution")!!
+                val isMinBitrateCheckEnabled: Boolean =
+                    call.argument<Boolean>("isMinBitrateCheckEnabled")!!
+                val frameRate: Int =
+                    call.argument<Int>("frameRate")!!
 
                 val quality: VideoQuality =
                     when (call.argument<String>("videoQuality")!!) {
@@ -90,8 +90,8 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                             destinationPath,
                             result,
                             quality,
-                            isMinBitRateEnabled,
-                            keepOriginalResolution
+                            frameRate,
+                            isMinBitrateCheckEnabled
                         )
                     } else {
                         compressVideo(
@@ -99,8 +99,8 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                             destinationPath,
                             result,
                             quality,
-                            isMinBitRateEnabled,
-                            keepOriginalResolution
+                            frameRate,
+                            isMinBitrateCheckEnabled
                         )
                     }
                 } else {
@@ -109,8 +109,8 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                         destinationPath,
                         result,
                         quality,
-                        isMinBitRateEnabled,
-                        keepOriginalResolution
+                        frameRate,
+                        isMinBitrateCheckEnabled
                     )
                 }
             }
@@ -128,8 +128,8 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
         destinationPath: String,
         result: Result,
         quality: VideoQuality,
-        isMinBitRateEnabled: Boolean,
-        keepOriginalResolution: Boolean,
+        frameRate: Int,
+        isMinBitrateCheckEnabled: Boolean,
     ) {
         VideoCompressor.start(
             srcPath = path,
@@ -180,8 +180,8 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
             },
             configureWith = Configuration(
                 quality = quality,
-                isMinBitRateEnabled = isMinBitRateEnabled,
-                keepOriginalResolution = keepOriginalResolution,
+                frameRate = frameRate,
+                isMinBitrateCheckEnabled = isMinBitrateCheckEnabled,
             )
 
         )

@@ -63,7 +63,7 @@ allprojects {
 Include this in your Module-level build.gradle file:
 
 ```groovy
-implementation 'com.github.AbedElazizShe:LightCompressor:0.9.4'
+implementation 'com.github.AbedElazizShe:LightCompressor:0.9.9'
 ```
 
 And since the library depends on Kotlin version `1.5.21`, please ensure that `1.5.21` is the minimum kotlin version in your project by changing `ext.kotlin_version` in your Project-level build.gradle file.
@@ -74,8 +74,8 @@ In order to start compression, just call [LightCompressor().compressVideo()] and
 1) `path`: the path of the provided video file to be compressed - **required**.
 2) `destinationPath`: the path where the output compressed video file should be saved - **required**.
 3) `videoQuality`: to allow choosing a video quality that can be `VideoQuality.very_low`, `VideoQuality.low`, `VideoQuality.medium`, `VideoQuality.high`, or `VideoQuality.very_high` - **required**.
-4) `isMinBitRateEnabled`: to determine if the checking for a minimum bitrate threshold before compression is enabled or not. The default value is `true` - **optional**.
-5) `keepOriginalResolution`: to keep the original video height and width when compressing. This default value is `false` - **optional**.
+4) `isMinBitrateCheckEnabled`: to determine if the checking for a minimum bitrate threshold before compression is enabled or not. The default value is `true` - **optional**.
+5) `frameRate`: to pass a custom framerate value, if not passed, the value will be retrieved from the original video - **optional**.
 6) `iosSaveInGallery`: to avoid saving the output file in gallery.
 
 ```dart
@@ -87,8 +87,8 @@ final dynamic response = await _lightCompressor.compressVideo(
   path: _sourcePath,
   destinationPath: _destinationPath,
   videoQuality: VideoQuality.medium,
-  isMinBitRateEnabled: false,
-  keepOriginalResolution: false);
+  isMinBitrateCheckEnabled: false,
+  frameRate: 24 /* or ignore it */);
 ```
 
 The plugin allows cancelling the compression by calling;
@@ -141,19 +141,13 @@ For more information on how to use the plugin, refer to the [sample app](https:/
 To report an issue, please specify the following:
 - Device name
 - Android version
-- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1yXTX9EnodRd1Bsw7UhAQsf6n3zJ9_u0Z/view?usp=sharing).
+- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1HiAPlic3pPkant_RoyJcFZhTcWwP9mAT/view?usp=sharing).
 
 
 ## Compatibility
 Minimum Android SDK: the plugin requires a minimum API level of 21.
 
 The minimum iOS version supported is 11.
-
-## What's next?
-
-- Allow passing a custom video width, height, and bitrate to avoid allowing the library to auto-generate the values.
-- Improve the speed of compression.
-- Simplify the plugin's APIs to make it easier to implement.
 
 ## Dart Versions
 

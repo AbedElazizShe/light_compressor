@@ -50,10 +50,9 @@ public struct LightCompressor {
      * @param [destination] the path where the output compressed video file should be saved
      * @param [quality] to allow choosing a video quality that can be [.very_low], [.low],
      * [.medium],  [.high], and [very_high]. This defaults to [.medium]
-     * @param [isMinBitRateEnabled] to determine if the checking for a minimum bitrate threshold
+     * @param [isMinBitrateCheckEnabled] to determine if the checking for a minimum bitrate threshold
      * before compression is enabled or not. This default to `true`
-     * @param [keepOriginalResolution] to keep the original video height and width when compressing.
-     * This defaults to `false`
+     * @param [frameRate] custom video frameRate value
      * @param [progressHandler] a compression progress  listener that listens to compression progress status
      * @param [completion] to return completion status that can be [onStart], [onSuccess], [onFailure],
      * and if the compression was [onCancelled]
@@ -62,8 +61,8 @@ public struct LightCompressor {
     public func compressVideo(source: URL,
                               destination: URL,
                               quality: VideoQuality,
-                              isMinBitRateEnabled: Bool = true,
-                              keepOriginalResolution: Bool = false,
+                              frameRate: Int? = nil
+                              isMinBitrateCheckEnabled: Bool = true,
                               progressQueue: DispatchQueue,
                               progressHandler: ((Progress) -> ())?,
                               completion: @escaping (CompressionResult) -> ()) -> Compression {
@@ -83,8 +82,8 @@ public struct LightCompressor {
 
         let bitrate = videoTrack.estimatedDataRate
         // Check for a min video bitrate before compression
-        if isMinBitRateEnabled && bitrate <= MIN_BITRATE {
-            let error = CompressionError(title: "The provided bitrate is smaller than what is needed for compression try to set isMinBitRateEnabled to false")
+        if isMinBitrateCheckEnabled && bitrate <= MIN_BITRATE {
+            let error = CompressionError(title: "The provided bitrate is smaller than what is needed for compression try to set isMinBitrateCheckEnabled to false")
             completion(.onFailure(error))
             return Compression()
         }
@@ -94,14 +93,20 @@ public struct LightCompressor {
 
         // Handle new width and height values
         let videoSize = videoTrack.naturalSize
-        let size = generateWidthAndHeight(width: videoSize.width, height: videoSize.height, keepOriginalResolution: keepOriginalResolution)
+        let size = generateWidthAndHeight(width: videoSize.width, height: videoSize.height)
         let newWidth = size.width
         let newHeight = size.height
 
         // Total Frames
         let durationInSeconds = videoAsset.duration.seconds
-        let frameRate = videoTrack.nominalFrameRate
-        let totalFrames = ceil(durationInSeconds * Double(frameRate))
+        var newFrameRate = 0
+        if(frameRate != nil){
+             newFrameRate = frameRate
+        } else {
+             newFrameRate = videoTrack.nominalFrameRate
+        }
+
+        let totalFrames = ceil(durationInSeconds * Double(newFrameRate))
 
         // Progress
         let totalUnits = Int64(totalFrames)
@@ -221,29 +226,24 @@ public struct LightCompressor {
     private func getBitrate(bitrate: Float, quality: VideoQuality) -> Int {
         
         if quality == .very_low {
-            return Int(bitrate * 0.08)
-        } else if quality == .low {
             return Int(bitrate * 0.1)
+        } else if quality == .low {
+            return Int(bitrate * 0.2)
         } else if quality == .medium {
-            return Int(bitrate * 0.2)
-        } else if quality == .high {
             return Int(bitrate * 0.3)
+        } else if quality == .high {
+            return Int(bitrate * 0.4)
         } else if quality == .very_high {
-            return Int(bitrate * 0.5)
+            return Int(bitrate * 0.6)
         } else {
-            return Int(bitrate * 0.2)
+            return Int(bitrate * 0.3)
         }
     }
     
     private func generateWidthAndHeight(
         width: CGFloat,
         height: CGFloat,
-        keepOriginalResolution: Bool
     ) -> (width: Int, height: Int) {
-        
-        if (keepOriginalResolution) {
-            return (Int(width), Int(height))
-        }
         
         var newWidth: Int
         var newHeight: Int
