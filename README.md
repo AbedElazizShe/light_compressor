@@ -79,7 +79,7 @@ In order to start compression, just call [LightCompressor().compressVideo()] and
 6) `iosSaveInGallery`: to avoid saving the output file in gallery.
 
 ```dart
-import 'package:light_compressor/compressor.dart';
+import 'package:light_compressor/light_compressor.dart';
 
 
 final LightCompressor _lightCompressor = LightCompressor();
