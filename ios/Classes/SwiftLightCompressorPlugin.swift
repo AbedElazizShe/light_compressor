@@ -49,7 +49,10 @@ public class SwiftLightCompressorPlugin: NSObject, FlutterPlugin, FlutterStreamH
                     progressHandler: { progress in
                         DispatchQueue.main.async { [unowned self] in
                             if(self.eventSink != nil){
-                                self.eventSink!(Float(progress.fractionCompleted * 100))
+                                let progress = Float(progress.fractionCompleted * 100)
+                                if(progress <= 100) {
+                                    self.eventSink!(progress)
+                                }
                             }
                         }
                     },

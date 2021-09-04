@@ -61,7 +61,7 @@ public struct LightCompressor {
     public func compressVideo(source: URL,
                               destination: URL,
                               quality: VideoQuality,
-                              frameRate: Int? = nil
+                              frameRate: Int? = nil,
                               isMinBitrateCheckEnabled: Bool = true,
                               progressQueue: DispatchQueue,
                               progressHandler: ((Progress) -> ())?,
@@ -100,10 +100,10 @@ public struct LightCompressor {
         // Total Frames
         let durationInSeconds = videoAsset.duration.seconds
         var newFrameRate = 0
-        if(frameRate != nil){
-             newFrameRate = frameRate
+        if(frameRate != nil) {
+             newFrameRate = frameRate ?? 30
         } else {
-             newFrameRate = videoTrack.nominalFrameRate
+             newFrameRate = Int(videoTrack.nominalFrameRate)
         }
 
         let totalFrames = ceil(durationInSeconds * Double(newFrameRate))
@@ -242,7 +242,7 @@ public struct LightCompressor {
     
     private func generateWidthAndHeight(
         width: CGFloat,
-        height: CGFloat,
+        height: CGFloat
     ) -> (width: Int, height: Int) {
         
         var newWidth: Int
