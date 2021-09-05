@@ -61,8 +61,7 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                     call.argument<String>("destinationPath")!!
                 val isMinBitrateCheckEnabled: Boolean =
                     call.argument<Boolean>("isMinBitrateCheckEnabled")!!
-                val frameRate: Int =
-                    call.argument<Int>("frameRate")!!
+                val frameRate: Int? = call.argument<Int?>("frameRate")
 
                 val quality: VideoQuality =
                     when (call.argument<String>("videoQuality")!!) {
@@ -128,7 +127,7 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
         destinationPath: String,
         result: Result,
         quality: VideoQuality,
-        frameRate: Int,
+        frameRate: Int?,
         isMinBitrateCheckEnabled: Boolean,
     ) {
         VideoCompressor.start(

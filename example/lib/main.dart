@@ -156,7 +156,6 @@ class _MyAppState extends State<MyApp> {
         path: _filePath!,
         destinationPath: _desFile,
         videoQuality: VideoQuality.medium,
-        frameRate: 24,
         isMinBitrateCheckEnabled: false,
         iosSaveInGallery: false);
 

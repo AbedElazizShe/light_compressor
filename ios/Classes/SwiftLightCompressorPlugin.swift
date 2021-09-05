@@ -24,7 +24,7 @@ public class SwiftLightCompressorPlugin: NSObject, FlutterPlugin, FlutterStreamH
                let path : String = myArgs["path"] as? String,
                let destinationPath : String? = myArgs["destinationPath"] as? String?,
                let isMinBitrateCheckEnabled : Bool = myArgs["isMinBitrateCheckEnabled"] as? Bool,
-               let frameRate : Int = myArgs["frameRate"] as? Int,
+               let frameRate : Int? = myArgs["frameRate"] as? Int?,
                let saveInGallery : Bool = myArgs["saveInGallery"] as? Bool,
                let videoQuality : String = myArgs["videoQuality"] as? String {
 

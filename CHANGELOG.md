@@ -1,3 +1,6 @@
+## 1.2.1
+Fixed an issue with optional frameRate value
+
 ## 1.2.0
 **BREAKING**: Renamed isMinBitRateEnabled to isMinBitrateCheckEnabled
 Passing frameRate value to the compressor is now allowed
