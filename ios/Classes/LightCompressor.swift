@@ -202,7 +202,7 @@ public struct LightCompressor {
                                         audioWriterInput.markAsFinished()
 
                                         videoWriter.finishWriting(completionHandler: {() -> Void in
-                                            ompletion(.onSuccess(destination))
+                                            completion(.onSuccess(destination))
                                         })
 
                                     }

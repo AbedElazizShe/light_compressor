@@ -1,3 +1,8 @@
+## 1.2.2
+Bumped Android's LightCompressor library to version 1.0.0.
+Fixed a crash in Android.
+Fixed iOS app building issue.
+
 ## 1.2.1
 Fixed an issue with optional frameRate value
 
