@@ -81,21 +81,20 @@ And since the library depends on Kotlin version `1.7.20`, please ensure that `1.
 
 In order to start compression, just call [LightCompressor().compressVideo()] and pass the following parameters;
 1) `path`: the path of the provided video file to be compressed - **required**.
-2) `destinationPath`: the path where the output compressed video file should be saved - **required**.
-3) `videoQuality`: to allow choosing a video quality that can be `VideoQuality.very_low`, `VideoQuality.low`, `VideoQuality.medium`, `VideoQuality.high`, or `VideoQuality.very_high` - **required**.
-4) `isMinBitrateCheckEnabled`: to determine if the checking for a minimum bitrate threshold before compression is enabled or not. The default value is `true` - **optional**.
-5) `android`: which contains configurations specific to Android. These configs are: - **required**
+2) `videoQuality`: to allow choosing a video quality that can be `VideoQuality.very_low`, `VideoQuality.low`, `VideoQuality.medium`, `VideoQuality.high`, or `VideoQuality.very_high` - **required**.
+3) `isMinBitrateCheckEnabled`: to determine if the checking for a minimum bitrate threshold before compression is enabled or not. The default value is `true` - **optional**.
+4) `android`: which contains configurations specific to Android. These configs are: - **required**
    1) saveAt: The location where the video should be saved externally. This value will be ignored if isExternal is `false`.
    2) isExternal: Whether to save the output video in external or internal storage.
-6) `ios`: which contains configurations specific to iOS; - **required**
+5) `ios`: which contains configurations specific to iOS; - **required**
    1) saveInGallery: To decide saving the video in gallery or not. This defaults to `true`.
-7) `video`: contains configurations of the output video:
+6) `video`: contains configurations of the output video:
    1) videoName: The name of the output video file. - **required**
    2) keepOriginalResolution: to keep the original video height and width when compressing.
    3) videoBitrateInMbps: a custom bitrate for the video.
    4) videoHeight: a custom height for the video.
    5) videoWidth: a custom width for the video.
-8) `disableAudio`: to give the option to generate a video with no audio. This defaults to `false`.
+7) `disableAudio`: to give the option to generate a video with no audio. This defaults to `false`.
 
 ```dart
 import 'package:light_compressor/light_compressor.dart';
