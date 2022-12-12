@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:light_compressor/src/compression_result.dart';
+import 'package:light_compressor/light_compressor.dart';
 
 /// The allowed video quality to pass for compression
 enum VideoQuality {
@@ -48,38 +48,57 @@ class LightCompressor {
   }
 
   /// This function compresses a given [path] video file and writes the
-  /// compressed video file at [destinationPath].
+  /// compressed video file in app-specific storage or external storage in
+  /// android and in gallery in ios.
   ///
   /// The required parameters are;
   /// * [path] is path of the provided video file to be compressed.
-  /// * [destinationPath] the path where the output compressed video file should
-  /// be saved.
   /// * [videoQuality] to allow choosing a video quality that can be
   /// [VideoQuality.very_low], [VideoQuality.low], [VideoQuality.medium],
   /// [VideoQuality.high], and [VideoQuality.very_high].
-  ///
+  /// * [android] which contains configurations specific to Android. These
+  /// configs are:
+  ///   - saveAt: The location where the video should be saved externally.
+  ///     This value will be ignored if isExternal is `false`.
+  ///   - isExternal: Whether to save the output video in external or internal
+  ///     storage.
+  /// * [ios] which contains configurations specific to iOS;
+  ///   - saveInGallery: To decide saving the video in gallery or not. This
+  ///     defaults to `true`.
+  /// * [video] contains configurations of the output video:
+  ///   - videoName: The name of the output video file. This value is required.
+  ///   - keepOriginalResolution: to keep the original video height and width when compressing.
+  ///   - videoBitrateInMbps: a custom bitrate for the video
+  ///   - videoHeight: a custom height for the video.
+  ///   - videoWidth: a custom width for the video.
   /// The optional parameters are;
   /// * [isMinBitrateCheckEnabled] to determine if the checking for a minimum bitrate
   /// threshold before compression is enabled or not. This defaults to `true`.
-  /// * [frameRate] custom frame rate value
-  /// * [iosSaveInGallery] to determine if the video should be saved in iOS
-  /// Gallery or not.
+  /// * [disableAudio] to give the option to generate a video with no audio.
+  /// This defaults to `false`
   Future<dynamic> compressVideo({
     required String path,
-    required String destinationPath,
     required VideoQuality videoQuality,
-    int? frameRate,
+    required AndroidConfig android,
+    required IOSConfig ios,
+    required Video video,
+    bool? disableAudio = false,
     bool isMinBitrateCheckEnabled = true,
-    bool iosSaveInGallery = true,
   }) async {
     final Map<String, dynamic> response = jsonDecode(await _channel
         .invokeMethod<dynamic>('startCompression', <String, dynamic>{
       'path': path,
-      'destinationPath': destinationPath,
       'videoQuality': videoQuality.toString().split('.').last,
-      'frameRate': frameRate,
+      'isExternal': android.isExternal,
+      'saveAt': android.saveAt.name,
+      'disableAudio': disableAudio,
+      'keepOriginalResolution': video.keepOriginalResolution,
       'isMinBitrateCheckEnabled': isMinBitrateCheckEnabled,
-      'saveInGallery': iosSaveInGallery,
+      'videoBitrateInMbps': video.videoBitrateInMbps,
+      'videoHeight': video.videoHeight,
+      'videoWidth': video.videoWidth,
+      'videoName': video.videoName,
+      'saveInGallery': ios.saveInGallery,
     }));
 
     if (response['onSuccess'] != null) {

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:light_compressor/light_compressor.dart';
 import 'package:light_compressor_example/utils/file_utils.dart';
 import 'package:light_compressor_example/video_player.dart';
-import 'package:path_provider/path_provider.dart' as path;
 
 void main() {
   runApp(MyApp());
@@ -32,7 +31,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) => MaterialApp(
         theme: ThemeData(
           primaryColor: const Color(0xFF344772),
-          accentColor: const Color(0xFF6272a1),
           primaryColorDark: const Color(0xFF002046),
         ),
         home: Scaffold(
@@ -150,14 +148,18 @@ class _MyAppState extends State<MyApp> {
       _failureMessage = null;
     });
 
-    _desFile = await _destinationFile;
+    final String videoName =
+        'MyVideo-${DateTime.now().millisecondsSinceEpoch}.mp4';
+
     final Stopwatch stopwatch = Stopwatch()..start();
     final dynamic response = await _lightCompressor.compressVideo(
-        path: _filePath!,
-        destinationPath: _desFile,
-        videoQuality: VideoQuality.medium,
-        isMinBitrateCheckEnabled: false,
-        iosSaveInGallery: false);
+      path: _filePath!,
+      videoQuality: VideoQuality.medium,
+      isMinBitrateCheckEnabled: false,
+      video: Video(videoName: videoName),
+      android: AndroidConfig(isExternal: true, saveAt: SaveAt.Movies),
+      ios: IOSConfig(saveInGallery: false),
+    );
 
     stopwatch.stop();
     final Duration duration =
@@ -165,9 +167,8 @@ class _MyAppState extends State<MyApp> {
     _duration = duration.inSeconds;
 
     if (response is OnSuccess) {
-      _desFile = response.destinationPath;
-
       setState(() {
+        _desFile = response.destinationPath;
         _displayedFile = _desFile;
         _isVideoCompressed = true;
       });
@@ -178,22 +179,6 @@ class _MyAppState extends State<MyApp> {
     } else if (response is OnCancelled) {
       print(response.isCancelled);
     }
-  }
-}
-
-Future<String> get _destinationFile async {
-  String directory;
-  final String videoName = '${DateTime.now().millisecondsSinceEpoch}.mp4';
-  if (Platform.isAndroid) {
-    // Handle this part the way you want to save it in any directory you wish.
-    final List<Directory>? dir = await path.getExternalStorageDirectories(
-        type: path.StorageDirectory.movies);
-    directory = dir!.first.path;
-    return File('$directory/$videoName').path;
-  } else {
-    final Directory dir = await path.getLibraryDirectory();
-    directory = dir.path;
-    return File('$directory/$videoName').path;
   }
 }
 

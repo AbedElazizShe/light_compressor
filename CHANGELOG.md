@@ -1,3 +1,17 @@
+# 2.0.0
+**BREAKING**: `frameRate` was removed and cannot be passed anymore.
+**BREAKING**: `destinationPath` was removed and cannot be passed anymore.
+**BREAKING**: It is required to pass Android configuration as `android`. In addition, `videoName` is required.
+**BREAKING**: It is required to pass iOS configuration as `ios`. 
+**BREAKING**: `iosSaveInGallery` was renamed to `saveInGallery` and should now be passed in `ios` configuration. 
+**BREAKING**: It is required to pass video configuration as `video`
+**BREAKING**: It is important to add run-time permissions for media access in Android. Refer to the documentation.
+`disableAudio` can be passed now to generate a video without audio.
+`keepOriginalResolution` was added to force keeping the video's original height and width.
+Both `videoHeight` and `videoWidth` can be provided now.
+Bumped Android's LightCompressor library to version 1.2.2.
+Android Target SDK was increased to 33.
+
 ## 1.2.2
 Bumped Android's LightCompressor library to version 1.0.0.
 Fixed a crash in Android.

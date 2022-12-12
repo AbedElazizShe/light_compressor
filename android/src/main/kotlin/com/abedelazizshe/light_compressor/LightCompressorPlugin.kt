@@ -4,16 +4,17 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.abedelazizshe.lightcompressorlibrary.CompressionListener
 import com.abedelazizshe.lightcompressorlibrary.VideoCompressor
 import com.abedelazizshe.lightcompressorlibrary.VideoQuality
 import com.abedelazizshe.lightcompressorlibrary.config.Configuration
+import com.abedelazizshe.lightcompressorlibrary.config.StorageConfiguration
 import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -23,6 +24,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import java.io.File
 
 /** LightCompressorPlugin */
 class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
@@ -40,7 +42,7 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
     private lateinit var applicationContext: Context
     private lateinit var activity: Activity
 
-    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         this.applicationContext = flutterPluginBinding.applicationContext
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL)
         channel.setMethodCallHandler(this)
@@ -51,17 +53,23 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
     }
 
     override fun onMethodCall(
-        @NonNull call: MethodCall,
-        @NonNull result: Result
+        call: MethodCall,
+        result: Result
     ) {
         when (call.method) {
             "startCompression" -> {
                 val path: String = call.argument<String>("path")!!
-                val destinationPath: String =
-                    call.argument<String>("destinationPath")!!
                 val isMinBitrateCheckEnabled: Boolean =
                     call.argument<Boolean>("isMinBitrateCheckEnabled")!!
-                val frameRate: Int? = call.argument<Int?>("frameRate")
+                val isExternal: Boolean = call.argument<Boolean>("isExternal")!!
+                val disableAudio: Boolean = call.argument<Boolean>("disableAudio")!!
+                val keepOriginalResolution: Boolean =
+                    call.argument<Boolean>("keepOriginalResolution")!!
+                val videoBitrateInMbps: Int? = call.argument<Int?>("videoBitrateInMbps")
+                val videoHeight: Int? = call.argument<Int?>("videoHeight")
+                val videoWidth: Int? = call.argument<Int?>("videoWidth")
+                val saveAt: String = call.argument<String>("saveAt")!!
+                val videoName: String = call.argument<String>("videoName")!!
 
                 val quality: VideoQuality =
                     when (call.argument<String>("videoQuality")!!) {
@@ -73,7 +81,36 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                         else -> VideoQuality.MEDIUM
                     }
 
-                if (Build.VERSION.SDK_INT >= 23) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (ContextCompat.checkSelfPermission(
+                            activity,
+                            Manifest.permission.READ_MEDIA_VIDEO,
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+
+                        if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                                activity,
+                                Manifest.permission.READ_MEDIA_VIDEO
+                            )
+                        ) {
+                            ActivityCompat.requestPermissions(
+                                activity,
+                                arrayOf(Manifest.permission.READ_MEDIA_VIDEO),
+                                2
+                            )
+
+                            compressVideo(
+                                path, result, quality, isExternal, isMinBitrateCheckEnabled,
+                                videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
+                                videoWidth, saveAt, videoName)
+                        }
+                    } else {
+                        compressVideo(
+                            path, result, quality, isExternal, isMinBitrateCheckEnabled,
+                            videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
+                            videoWidth, saveAt, videoName)
+                    }
+                } else if (Build.VERSION.SDK_INT >= 23) {
                     val permissions = arrayOf(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -85,32 +122,20 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                             1
                         )
                         compressVideo(
-                            path,
-                            destinationPath,
-                            result,
-                            quality,
-                            frameRate,
-                            isMinBitrateCheckEnabled
-                        )
+                            path, result, quality, isExternal, isMinBitrateCheckEnabled,
+                            videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
+                            videoWidth, saveAt, videoName)
                     } else {
                         compressVideo(
-                            path,
-                            destinationPath,
-                            result,
-                            quality,
-                            frameRate,
-                            isMinBitrateCheckEnabled
-                        )
+                            path, result, quality, isExternal, isMinBitrateCheckEnabled,
+                            videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
+                            videoWidth, saveAt, videoName)
                     }
                 } else {
                     compressVideo(
-                        path,
-                        destinationPath,
-                        result,
-                        quality,
-                        frameRate,
-                        isMinBitrateCheckEnabled
-                    )
+                        path, result, quality, isExternal, isMinBitrateCheckEnabled,
+                        videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
+                        videoWidth, saveAt, videoName)
                 }
             }
             "cancelCompression" -> {
@@ -124,36 +149,49 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
 
     private fun compressVideo(
         path: String,
-        destinationPath: String,
         result: Result,
         quality: VideoQuality,
-        frameRate: Int?,
+        isExternal: Boolean,
         isMinBitrateCheckEnabled: Boolean,
+        videoBitrateInMbps: Int?,
+        disableAudio: Boolean,
+        keepOriginalResolution: Boolean,
+        videoHeight: Int?,
+        videoWidth: Int?,
+        saveAt: String,
+        videoName: String,
     ) {
+
         VideoCompressor.start(
-            srcPath = path,
-            destPath = destinationPath,
+            context = applicationContext,
+            uris = listOf(Uri.fromFile(File(path))),
+            isStreamable = false,
+            storageConfiguration = StorageConfiguration(
+                saveAt = saveAt,
+                fileName = videoName,
+                isExternal = isExternal,
+            ),
             listener = object : CompressionListener {
-                override fun onProgress(percent: Float) {
+                override fun onProgress(index: Int, percent: Float) {
                     Handler(Looper.getMainLooper()).post {
                         eventSink?.success(percent)
                     }
                 }
 
-                override fun onStart() {}
+                override fun onStart(index: Int) {}
 
-                override fun onSuccess() {
+                override fun onSuccess(index: Int, size: Long, path: String?) {
                     result.success(
                         gson.toJson(
                             buildResponseBody(
                                 "onSuccess",
-                                destinationPath
+                                path!!
                             )
                         )
                     )
                 }
 
-                override fun onFailure(failureMessage: String) {
+                override fun onFailure(index: Int, failureMessage: String) {
                     result.success(
                         gson.toJson(
                             buildResponseBody(
@@ -164,7 +202,7 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                     )
                 }
 
-                override fun onCancelled() {
+                override fun onCancelled(index: Int) {
                     Handler(Looper.getMainLooper()).post {
                         result.success(
                             gson.toJson(
@@ -179,14 +217,18 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
             },
             configureWith = Configuration(
                 quality = quality,
-                frameRate = frameRate,
                 isMinBitrateCheckEnabled = isMinBitrateCheckEnabled,
+                videoBitrateInMbps = videoBitrateInMbps,
+                disableAudio = disableAudio,
+                keepOriginalResolution = keepOriginalResolution,
+                videoHeight = videoHeight?.toDouble(),
+                videoWidth = videoWidth?.toDouble()
             )
 
         )
     }
 
-    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
         eventChannel.setStreamHandler(null)
     }
