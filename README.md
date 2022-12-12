@@ -72,7 +72,7 @@ allprojects {
 Include this in your Module-level build.gradle file:
 
 ```groovy
-implementation 'com.github.AbedElazizShe:LightCompressor:1.2.2
+implementation 'com.github.AbedElazizShe:LightCompressor:1.2.2'
 ```
 
 And since the library depends on Kotlin version `1.7.20`, please ensure that `1.7.20` is the minimum kotlin version in your project by changing `ext.kotlin_version` in your Project-level build.gradle file.
