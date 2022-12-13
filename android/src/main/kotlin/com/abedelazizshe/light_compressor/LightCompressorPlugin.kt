@@ -13,8 +13,7 @@ import androidx.core.content.ContextCompat
 import com.abedelazizshe.lightcompressorlibrary.CompressionListener
 import com.abedelazizshe.lightcompressorlibrary.VideoCompressor
 import com.abedelazizshe.lightcompressorlibrary.VideoQuality
-import com.abedelazizshe.lightcompressorlibrary.config.Configuration
-import com.abedelazizshe.lightcompressorlibrary.config.StorageConfiguration
+import com.abedelazizshe.lightcompressorlibrary.config.*
 import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -61,7 +60,7 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                 val path: String = call.argument<String>("path")!!
                 val isMinBitrateCheckEnabled: Boolean =
                     call.argument<Boolean>("isMinBitrateCheckEnabled")!!
-                val isExternal: Boolean = call.argument<Boolean>("isExternal")!!
+                val isSharedStorage: Boolean = call.argument<Boolean>("isSharedStorage")!!
                 val disableAudio: Boolean = call.argument<Boolean>("disableAudio")!!
                 val keepOriginalResolution: Boolean =
                     call.argument<Boolean>("keepOriginalResolution")!!
@@ -100,15 +99,26 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                             )
 
                             compressVideo(
-                                path, result, quality, isExternal, isMinBitrateCheckEnabled,
-                                videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
-                                videoWidth, saveAt, videoName)
+                                path,
+                                result,
+                                quality,
+                                isSharedStorage,
+                                isMinBitrateCheckEnabled,
+                                videoBitrateInMbps,
+                                disableAudio,
+                                keepOriginalResolution,
+                                videoHeight,
+                                videoWidth,
+                                saveAt,
+                                videoName
+                            )
                         }
                     } else {
                         compressVideo(
-                            path, result, quality, isExternal, isMinBitrateCheckEnabled,
+                            path, result, quality, isSharedStorage, isMinBitrateCheckEnabled,
                             videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
-                            videoWidth, saveAt, videoName)
+                            videoWidth, saveAt, videoName
+                        )
                     }
                 } else if (Build.VERSION.SDK_INT >= 23) {
                     val permissions = arrayOf(
@@ -122,20 +132,23 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                             1
                         )
                         compressVideo(
-                            path, result, quality, isExternal, isMinBitrateCheckEnabled,
+                            path, result, quality, isSharedStorage, isMinBitrateCheckEnabled,
                             videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
-                            videoWidth, saveAt, videoName)
+                            videoWidth, saveAt, videoName
+                        )
                     } else {
                         compressVideo(
-                            path, result, quality, isExternal, isMinBitrateCheckEnabled,
+                            path, result, quality, isSharedStorage, isMinBitrateCheckEnabled,
                             videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
-                            videoWidth, saveAt, videoName)
+                            videoWidth, saveAt, videoName
+                        )
                     }
                 } else {
                     compressVideo(
-                        path, result, quality, isExternal, isMinBitrateCheckEnabled,
+                        path, result, quality, isSharedStorage, isMinBitrateCheckEnabled,
                         videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
-                        videoWidth, saveAt, videoName)
+                        videoWidth, saveAt, videoName
+                    )
                 }
             }
             "cancelCompression" -> {
@@ -151,7 +164,7 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
         path: String,
         result: Result,
         quality: VideoQuality,
-        isExternal: Boolean,
+        isSharedStorage: Boolean,
         isMinBitrateCheckEnabled: Boolean,
         videoBitrateInMbps: Int?,
         disableAudio: Boolean,
@@ -166,11 +179,18 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
             context = applicationContext,
             uris = listOf(Uri.fromFile(File(path))),
             isStreamable = false,
-            storageConfiguration = StorageConfiguration(
-                saveAt = saveAt,
-                fileName = videoName,
-                isExternal = isExternal,
-            ),
+            sharedStorageConfiguration = if (isSharedStorage) SharedStorageConfiguration(
+                videoName = videoName,
+                saveAt = when (saveAt) {
+                    "Downloads" -> SaveLocation.downloads
+                    "Pictures" -> SaveLocation.pictures
+                    "Movies" -> SaveLocation.movies
+                    else -> SaveLocation.movies
+                }
+            ) else null,
+            appSpecificStorageConfiguration = if (!isSharedStorage) AppSpecificStorageConfiguration(
+                videoName = videoName
+            ) else null,
             listener = object : CompressionListener {
                 override fun onProgress(index: Int, percent: Float) {
                     Handler(Looper.getMainLooper()).post {

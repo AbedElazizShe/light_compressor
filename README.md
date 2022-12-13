@@ -72,7 +72,7 @@ allprojects {
 Include this in your Module-level build.gradle file:
 
 ```groovy
-implementation 'com.github.AbedElazizShe:LightCompressor:1.2.2'
+implementation 'com.github.AbedElazizShe:LightCompressor:1.2.3'
 ```
 
 And since the library depends on Kotlin version `1.7.20`, please ensure that `1.7.20` is the minimum kotlin version in your project by changing `ext.kotlin_version` in your Project-level build.gradle file.
@@ -84,8 +84,8 @@ In order to start compression, just call [LightCompressor().compressVideo()] and
 2) `videoQuality`: to allow choosing a video quality that can be `VideoQuality.very_low`, `VideoQuality.low`, `VideoQuality.medium`, `VideoQuality.high`, or `VideoQuality.very_high` - **required**.
 3) `isMinBitrateCheckEnabled`: to determine if the checking for a minimum bitrate threshold before compression is enabled or not. The default value is `true` - **optional**.
 4) `android`: which contains configurations specific to Android. These configs are: - **required**
-   1) saveAt: The location where the video should be saved externally. This value will be ignored if isExternal is `false`.
-   2) isExternal: Whether to save the output video in external or internal storage.
+   1) saveAt: The location where the video should be saved externally. This value will be ignored if isSharedStorage is `false`.
+   2) isSharedStorage: Whether to save the output video in Android's Shared or App-Specific storage. Refer to this https://developer.android.com/training/data-storage.
 5) `ios`: which contains configurations specific to iOS; - **required**
    1) saveInGallery: To decide saving the video in gallery or not. This defaults to `true`.
 6) `video`: contains configurations of the output video:
@@ -107,7 +107,7 @@ final dynamic response = await _lightCompressor.compressVideo(
   videoQuality: VideoQuality.medium,
   isMinBitrateCheckEnabled: false,
   video: Video(videoName: videoName),
-  android: AndroidConfig(isExternal: true, saveAt: SaveAt.Movies),
+  android: AndroidConfig(isSharedStorage: true, saveAt: SaveAt.Movies),
   ios: IOSConfig(saveInGallery: true),);
 ```
 
@@ -161,7 +161,7 @@ For more information on how to use the plugin, refer to the [sample app](https:/
 To report an issue, please specify the following:
 - Device name
 - Android version
-- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1CGZj_v8pZUem2_qt2n-b_Ig5dEB8eg6b/view?usp=share_link).
+- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1MN7Kqxh7UUDBhwH3ChL7bSeSE_gnChXa/view?usp=share_link).
 
 
 ## Compatibility

@@ -60,7 +60,7 @@ class LightCompressor {
   /// configs are:
   ///   - saveAt: The location where the video should be saved externally.
   ///     This value will be ignored if isExternal is `false`.
-  ///   - isExternal: Whether to save the output video in external or internal
+  ///   - isSharedStorage: Whether to save the output video in external or internal
   ///     storage.
   /// * [ios] which contains configurations specific to iOS;
   ///   - saveInGallery: To decide saving the video in gallery or not. This
@@ -89,7 +89,7 @@ class LightCompressor {
         .invokeMethod<dynamic>('startCompression', <String, dynamic>{
       'path': path,
       'videoQuality': videoQuality.toString().split('.').last,
-      'isExternal': android.isExternal,
+      'isSharedStorage': android.isSharedStorage,
       'saveAt': android.saveAt.name,
       'disableAudio': disableAudio,
       'keepOriginalResolution': video.keepOriginalResolution,

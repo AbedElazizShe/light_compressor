@@ -157,7 +157,7 @@ class _MyAppState extends State<MyApp> {
       videoQuality: VideoQuality.medium,
       isMinBitrateCheckEnabled: false,
       video: Video(videoName: videoName),
-      android: AndroidConfig(isExternal: true, saveAt: SaveAt.Movies),
+      android: AndroidConfig(isSharedStorage: true, saveAt: SaveAt.Movies),
       ios: IOSConfig(saveInGallery: false),
     );
 

@@ -1,16 +1,17 @@
 /// Android specific configurations.
 class AndroidConfig {
   AndroidConfig({
-    this.isExternal = true,
+    this.isSharedStorage = true,
     this.saveAt = SaveAt.Movies,
   });
 
-  /// Whether to save the output video in external or internal storage.
-  final bool isExternal;
+  /// https://developer.android.com/training/data-storage
+  /// Whether to save the output video in shared or app specific storage.
+  final bool isSharedStorage;
 
   /// The location where the video should be saved externally. This value will
-  /// be ignored if [isExternal] is `false`.
+  /// be ignored if [isSharedStorage] is `false`.
   final SaveAt saveAt;
 }
 
-enum SaveAt { Pictures, Movies, DCIM }
+enum SaveAt { Pictures, Movies, Downloads }
