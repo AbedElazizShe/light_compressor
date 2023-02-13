@@ -80,7 +80,7 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                         else -> VideoQuality.MEDIUM
                     }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (isSharedStorage && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     if (ContextCompat.checkSelfPermission(
                             activity,
                             Manifest.permission.READ_MEDIA_VIDEO,
@@ -120,7 +120,7 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                             videoWidth, saveAt, videoName
                         )
                     }
-                } else if (Build.VERSION.SDK_INT >= 23) {
+                } else if (isSharedStorage && Build.VERSION.SDK_INT >= 23) {
                     val permissions = arrayOf(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
