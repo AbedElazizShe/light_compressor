@@ -1,8 +1,6 @@
 import Flutter
-import UIKit
 import Photos 
 
-@available(iOS 14.0, *)
 public class SwiftLightCompressorPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     
     private var eventSink: FlutterEventSink?

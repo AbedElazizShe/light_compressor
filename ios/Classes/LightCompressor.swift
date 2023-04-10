@@ -1,5 +1,4 @@
 import AVFoundation
-import UIKit
 
 public enum VideoQuality {
     case very_high
@@ -33,7 +32,6 @@ public struct CompressionError: LocalizedError {
     }
 }
 
-@available(iOS 14.0, *)
 public struct LightCompressor {
     public struct Video {
         public struct Configuration {
