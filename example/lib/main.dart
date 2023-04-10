@@ -136,7 +136,7 @@ class _MyAppState extends State<MyApp> {
       type: FileType.video,
     );
 
-    final PlatformFile? file = result!.files.first;
+    final PlatformFile? file = result?.files.first;
 
     if (file == null) {
       return;
