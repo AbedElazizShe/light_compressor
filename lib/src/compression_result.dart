@@ -1,5 +1,7 @@
+abstract class Result {}
+
 /// Compression is completed successfully state.
-class OnSuccess {
+class OnSuccess implements Result {
   /// OnSuccess state.
   const OnSuccess(this.destinationPath);
 
@@ -8,7 +10,7 @@ class OnSuccess {
 }
 
 /// Compression failed state.
-class OnFailure {
+class OnFailure implements Result {
   /// OnFailure state.
   const OnFailure(this.message);
 
@@ -17,9 +19,9 @@ class OnFailure {
 }
 
 /// Compression was cancelled state.
-class OnCancelled {
+class OnCancelled implements Result {
   /// OnCancelled state.
-  const OnCancelled(this.isCancelled);
+  const OnCancelled({required this.isCancelled});
 
   /// Determines whether the cancellation is done or not.
   final bool isCancelled;

@@ -136,7 +136,7 @@ class _MyAppState extends State<MyApp> {
       type: FileType.video,
     );
 
-    final PlatformFile? file = result!.files.first;
+    final PlatformFile? file = result?.files.first;
 
     if (file == null) {
       return;
@@ -152,7 +152,7 @@ class _MyAppState extends State<MyApp> {
         'MyVideo-${DateTime.now().millisecondsSinceEpoch}.mp4';
 
     final Stopwatch stopwatch = Stopwatch()..start();
-    final dynamic response = await _lightCompressor.compressVideo(
+    final Result response = await _lightCompressor.compressVideo(
       path: _filePath!,
       videoQuality: VideoQuality.medium,
       isMinBitrateCheckEnabled: false,

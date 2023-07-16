@@ -76,7 +76,7 @@ class LightCompressor {
   /// threshold before compression is enabled or not. This defaults to `true`.
   /// * [disableAudio] to give the option to generate a video with no audio.
   /// This defaults to `false`
-  Future<dynamic> compressVideo({
+  Future<Result> compressVideo({
     required String path,
     required VideoQuality videoQuality,
     required AndroidConfig android,
@@ -106,7 +106,7 @@ class LightCompressor {
     } else if (response['onFailure'] != null) {
       return OnFailure(response['onFailure']);
     } else if (response['onCancelled'] != null) {
-      return OnCancelled(response['onCancelled']);
+      return OnCancelled(isCancelled: response['onCancelled']);
     } else {
       return const OnFailure('Something went wrong');
     }

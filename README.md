@@ -72,10 +72,10 @@ allprojects {
 Include this in your Module-level build.gradle file:
 
 ```groovy
-implementation 'com.github.AbedElazizShe:LightCompressor:1.2.3'
+implementation 'com.github.AbedElazizShe:LightCompressor:1.3.1'
 ```
 
-And since the library depends on Kotlin version `1.7.20`, please ensure that `1.7.20` is the minimum kotlin version in your project by changing `ext.kotlin_version` in your Project-level build.gradle file.
+And since the library depends on Kotlin version `1.8.21`, please ensure that `1.8.21` is the minimum kotlin version in your project by changing `ext.kotlin_version` in your Project-level build.gradle file.
 
 ## Usage
 
@@ -101,7 +101,7 @@ import 'package:light_compressor/light_compressor.dart';
 
 
 final LightCompressor _lightCompressor = LightCompressor();
-final dynamic response = await _lightCompressor.compressVideo(
+final Result response = await _lightCompressor.compressVideo(
   path: _sourcePath,
   destinationPath: _destinationPath,
   videoQuality: VideoQuality.medium,
@@ -161,17 +161,17 @@ For more information on how to use the plugin, refer to the [sample app](https:/
 To report an issue, please specify the following:
 - Device name
 - Android version
-- If the bug/issue exists on the sample app of the library that could be downloaded at this [link](https://drive.google.com/file/d/1MN7Kqxh7UUDBhwH3ChL7bSeSE_gnChXa/view?usp=share_link).
+- If the bug/issue exists on the sample app of the library that could be downloaded at this [app-specific-storage-link](https://drive.google.com/file/d/1Hh9JJ78tUiCDEiujcIu88rmWJVUO-hQS/view?usp=sharing), or [shared-storage-link](https://drive.google.com/file/d/1iUBcQdeMkzQqlsSeAT17uDM2pRAh5hOV/view?usp=sharing)
 
 
 ## Compatibility
-Minimum Android SDK: the plugin requires a minimum API level of 21.
+Minimum Android SDK: the plugin requires a minimum API level of 24.
 
 The minimum iOS version supported is 14.
 
 ## Dart Versions
 
-- Dart 2: >= 2.18.5
+- Dart 3: >= 3.0.0
 
 ## Maintainers
 

@@ -1,4 +1,12 @@
-# 2.0.1:
+# 2.1.0
+
+**BREAKING**: Minimum supported Android API is 24.
+
+Bumped Android's LightCompressor library to version 1.3.0.
+
+
+# 2.0.1
+
 **BREAKING**: `isExternal` was renamed to `isSharedStorage`
 
 Bumped Android's LightCompressor library to version 1.2.3.
@@ -6,6 +14,7 @@ Bumped Android's LightCompressor library to version 1.2.3.
 Bugs fixes
 
 # 2.0.0
+
 **BREAKING**: `frameRate` was removed and cannot be passed anymore.
 
 **BREAKING**: `destinationPath` was removed and cannot be passed anymore.
@@ -32,14 +41,17 @@ Android Target SDK was increased to 33.
 
 
 ## 1.2.2
+
 Bumped Android's LightCompressor library to version 1.0.0.
 Fixed a crash in Android.
 Fixed iOS app building issue.
 
 ## 1.2.1
+
 Fixed an issue with optional frameRate value
 
 ## 1.2.0
+
 **BREAKING**: Renamed isMinBitRateEnabled to isMinBitrateCheckEnabled
 Passing frameRate value to the compressor is now allowed
 Redefined the bitrate values for each of the Qualities
@@ -47,9 +59,11 @@ Compression speed is improved.
 Bugs fixes related to codec profile and audio track.
 
 ## 1.1.1
+
 Updated documentation.
 
 ## 1.1.0
+
 **Breaking**: LightCompressor is now following Singleton pattern, call the methods using `LightCompressor()`
 
 **Breaking**: `compressVideo()` returns a `dynamic` response, to check for success, failure, or cancellation; use `is OnSuccess`, `is OnFailure`, and `is onCancelled` respectively. Refer to the sample app for more details.
@@ -63,27 +77,34 @@ Several bugs fixes and speed improvements.
 Enabled the usage of software encoders if hardware encoders don't exist, such as in certain emulators.
 
 ## 1.0.3
+
 Fixed iOS crash when the video has no audio.
 Allowed passing `iosSaveInGallery (true/false)` to control saving the compressed video in iOS.
 
 ## 1.0.2
+
 Updated Android dependency.
 Minor code refactor and cleanup
 
 ## 1.0.1
+
 Bugs fixes.
 
 ## 1.0.0
+
 Migrated to null safety.
 
 ## 0.1.0
+
 Bugs fixes.
 
 ## 0.0.7
+
 Fixed a crash at iOS the video has no sound.
 Replaced image_picker with file_picker for the sample app due to this open issue https://github.com/flutter/flutter/issues/52419
 
 ## 0.0.6
+
 Updated dependencies.
 Fixed a crash on iOS.
 

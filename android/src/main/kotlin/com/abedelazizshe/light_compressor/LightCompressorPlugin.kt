@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.abedelazizshe.lightcompressorlibrary.CompressionListener
@@ -80,80 +81,49 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                         else -> VideoQuality.MEDIUM
                     }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    if (ContextCompat.checkSelfPermission(
-                            activity,
-                            Manifest.permission.READ_MEDIA_VIDEO,
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) {
-
-                        if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                                activity,
-                                Manifest.permission.READ_MEDIA_VIDEO
-                            )
-                        ) {
-                            ActivityCompat.requestPermissions(
-                                activity,
-                                arrayOf(Manifest.permission.READ_MEDIA_VIDEO),
-                                2
-                            )
-
-                            compressVideo(
-                                path,
-                                result,
-                                quality,
-                                isSharedStorage,
-                                isMinBitrateCheckEnabled,
-                                videoBitrateInMbps,
-                                disableAudio,
-                                keepOriginalResolution,
-                                videoHeight,
-                                videoWidth,
-                                saveAt,
-                                videoName
-                            )
-                        }
-                    } else {
-                        compressVideo(
-                            path, result, quality, isSharedStorage, isMinBitrateCheckEnabled,
-                            videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
-                            videoWidth, saveAt, videoName
-                        )
-                    }
-                } else if (Build.VERSION.SDK_INT >= 23) {
-                    val permissions = arrayOf(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    )
-                    if (!hasPermissions(applicationContext, permissions)) {
-                        ActivityCompat.requestPermissions(
-                            activity,
-                            permissions,
-                            1
-                        )
-                        compressVideo(
-                            path, result, quality, isSharedStorage, isMinBitrateCheckEnabled,
-                            videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
-                            videoWidth, saveAt, videoName
+                if (isSharedStorage) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        android33AndAboveSharedStorageCompression(
+                            path,
+                            result,
+                            quality,
+                            isMinBitrateCheckEnabled,
+                            videoBitrateInMbps,
+                            disableAudio,
+                            keepOriginalResolution,
+                            videoHeight,
+                            videoWidth,
+                            saveAt,
+                            videoName
                         )
                     } else {
-                        compressVideo(
-                            path, result, quality, isSharedStorage, isMinBitrateCheckEnabled,
-                            videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
-                            videoWidth, saveAt, videoName
+                        android24AndAboveSharedStorageCompression(
+                            path,
+                            result,
+                            quality,
+                            isMinBitrateCheckEnabled,
+                            videoBitrateInMbps,
+                            disableAudio,
+                            keepOriginalResolution,
+                            videoHeight,
+                            videoWidth,
+                            saveAt,
+                            videoName
                         )
                     }
                 } else {
                     compressVideo(
-                        path, result, quality, isSharedStorage, isMinBitrateCheckEnabled,
+                        path, result, quality, false, isMinBitrateCheckEnabled,
                         videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
                         videoWidth, saveAt, videoName
                     )
                 }
             }
+
             "cancelCompression" -> {
                 VideoCompressor.cancel()
             }
+
             else -> {
                 result.notImplemented()
             }
@@ -180,7 +150,6 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
             uris = listOf(Uri.fromFile(File(path))),
             isStreamable = false,
             sharedStorageConfiguration = if (isSharedStorage) SharedStorageConfiguration(
-                videoName = videoName,
                 saveAt = when (saveAt) {
                     "Downloads" -> SaveLocation.downloads
                     "Pictures" -> SaveLocation.pictures
@@ -189,7 +158,6 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                 }
             ) else null,
             appSpecificStorageConfiguration = if (!isSharedStorage) AppSpecificStorageConfiguration(
-                videoName = videoName
             ) else null,
             listener = object : CompressionListener {
                 override fun onProgress(index: Int, percent: Float) {
@@ -242,7 +210,8 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
                 disableAudio = disableAudio,
                 keepOriginalResolution = keepOriginalResolution,
                 videoHeight = videoHeight?.toDouble(),
-                videoWidth = videoWidth?.toDouble()
+                videoWidth = videoWidth?.toDouble(),
+                videoNames = listOf(videoName),
             )
 
         )
@@ -266,11 +235,91 @@ class LightCompressorPlugin : FlutterPlugin, MethodCallHandler,
         response: Any
     ): Map<String, Any> = mapOf(tag to response)
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun android33AndAboveSharedStorageCompression(
+        path: String,
+        result: Result,
+        quality: VideoQuality,
+        isMinBitrateCheckEnabled: Boolean,
+        videoBitrateInMbps: Int?,
+        disableAudio: Boolean,
+        keepOriginalResolution: Boolean,
+        videoHeight: Int?,
+        videoWidth: Int?,
+        saveAt: String,
+        videoName: String
+    ) {
+        if (ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.READ_MEDIA_VIDEO,
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                    activity,
+                    Manifest.permission.READ_MEDIA_VIDEO
+                )
+            ) {
+                ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(Manifest.permission.READ_MEDIA_VIDEO),
+                    2
+                )
+
+                compressVideo(
+                    path,
+                    result,
+                    quality,
+                    true,
+                    isMinBitrateCheckEnabled,
+                    videoBitrateInMbps,
+                    disableAudio,
+                    keepOriginalResolution,
+                    videoHeight,
+                    videoWidth,
+                    saveAt,
+                    videoName
+                )
+            }
+        }
+    }
+
+    private fun android24AndAboveSharedStorageCompression(
+        path: String,
+        result: Result,
+        quality: VideoQuality,
+        isMinBitrateCheckEnabled: Boolean,
+        videoBitrateInMbps: Int?,
+        disableAudio: Boolean,
+        keepOriginalResolution: Boolean,
+        videoHeight: Int?,
+        videoWidth: Int?,
+        saveAt: String,
+        videoName: String
+    ) {
+        val permissions = arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+        if (!hasPermissions(applicationContext, permissions)) {
+            ActivityCompat.requestPermissions(
+                activity,
+                permissions,
+                1
+            )
+            compressVideo(
+                path, result, quality, true, isMinBitrateCheckEnabled,
+                videoBitrateInMbps, disableAudio, keepOriginalResolution, videoHeight,
+                videoWidth, saveAt, videoName
+            )
+        }
+    }
+
     private fun hasPermissions(
         context: Context?,
         permissions: Array<String>
     ): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null) {
+        if (context != null) {
             for (permission in permissions) {
                 if (ContextCompat.checkSelfPermission(
                         context,
