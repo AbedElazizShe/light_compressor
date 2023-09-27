@@ -4,7 +4,7 @@
 
 
 # light_compressor
-A powerful and easy-to-use video compression plugin for Flutter built based on [LightCompressor](https://github.com/AbedElazizShe/LightCompressor/tree/master/lightcompressor) library for Android and [LightCompressor_iOS](https://github.com/AbedElazizShe/LightCompressor_iOS) library for iOS. This plugin generates a compressed MP4 video with a modified width, height, and bitrate.
+A powerful and easy-to-use video compression plugin for Flutter built based on [LightCompressor](https://github.com/AbedElazizShe/LightCompressor/tree/master/lightcompressor) library for Android and [LightCompressor_iOS](https://github.com/AbedElazizShe/LightCompressor_iOS) library for iOS and macOS. This plugin generates a compressed MP4 video with a modified width, height, and bitrate.
 
 The general idea of how the library works is that, extreme high bitrate is reduced while maintaining a good video quality resulting in a smaller size.
 
@@ -21,7 +21,7 @@ You can pass one of a 5 video qualities; `very_high`, `high`, `medium`, `low` OR
 
 First, add `light_compressor` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
-### iOS
+### iOS and macOS
 
 Add the following to your _Info.plist_ file, located in `<project root>/ios/Runner/Info.plist`:
 
@@ -86,7 +86,7 @@ In order to start compression, just call [LightCompressor().compressVideo()] and
 4) `android`: which contains configurations specific to Android. These configs are: - **required**
    1) saveAt: The location where the video should be saved externally. This value will be ignored if isSharedStorage is `false`.
    2) isSharedStorage: Whether to save the output video in Android's Shared or App-Specific storage. Refer to this https://developer.android.com/training/data-storage.
-5) `ios`: which contains configurations specific to iOS; - **required**
+5) `ios`: which contains configurations specific to iOS and macOS; - **required**
    1) saveInGallery: To decide saving the video in gallery or not. This defaults to `true`.
 6) `video`: contains configurations of the output video:
    1) videoName: The name of the output video file. - **required**
@@ -167,7 +167,9 @@ To report an issue, please specify the following:
 ## Compatibility
 Minimum Android SDK: the plugin requires a minimum API level of 24.
 
-The minimum iOS version supported is 14.
+The minimum iOS version supported is 11.
+
+The minimum macOS version supported is 10.15.
 
 ## Dart Versions
 

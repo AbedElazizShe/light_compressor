@@ -14,8 +14,8 @@ Light Video Compressor Library.
   s.author           = { 'Your Company' => 'elaziz.shehadeh@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
-  s.dependency 'Flutter'
-  s.platform = :ios, '11.0'
+  s.dependency 'FlutterMacOS'
+  s.platform = :osx, '10.15'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }

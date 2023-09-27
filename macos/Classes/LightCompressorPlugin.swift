@@ -1,17 +1,17 @@
-import Flutter
+import FlutterMacOS
 import Photos 
 
-public class SwiftLightCompressorPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
+public class LightCompressorPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     
     private var eventSink: FlutterEventSink?
     private var compression: Compression? = nil
     
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "light_compressor", binaryMessenger: registrar.messenger())
-        let instance = SwiftLightCompressorPlugin()
+        let channel = FlutterMethodChannel(name: "light_compressor", binaryMessenger: registrar.messenger)
+        let instance = LightCompressorPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
         
-        let eventChannel = FlutterEventChannel(name: "compression/stream", binaryMessenger: registrar.messenger())
+        let eventChannel = FlutterEventChannel(name: "compression/stream", binaryMessenger: registrar.messenger)
         eventChannel.setStreamHandler(instance.self)
     }
     

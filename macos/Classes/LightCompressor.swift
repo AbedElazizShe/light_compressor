@@ -332,5 +332,4 @@ public struct LightCompressor {
         
         return videoWriterSettings
     }
-    
 }

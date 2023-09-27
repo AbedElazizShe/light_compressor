@@ -25,3 +25,5 @@ flutter:
         pluginClass: LightCompressorPlugin
       ios:
         pluginClass: LightCompressorPlugin
+      macos:
+        pluginClass: LightCompressorPlugin
