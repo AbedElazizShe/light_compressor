@@ -113,6 +113,6 @@ class LightCompressor {
   }
 
   /// Call this function to cancel video compression process.
-  static Future<Map<String, dynamic>?> cancelCompression() async =>
+  Future<Map<String, dynamic>?> cancelCompression() async =>
       jsonDecode(await _channel.invokeMethod<dynamic>('cancelCompression'));
 }

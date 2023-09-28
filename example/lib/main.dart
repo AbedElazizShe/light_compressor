@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
                   'Cancel',
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
-                onPressed: () => LightCompressor.cancelCompression(),
+                onPressed: () => _lightCompressor.cancelCompression(),
               )
             ],
           ),
